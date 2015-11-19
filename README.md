@@ -1,6 +1,6 @@
 # sds
-## structured data search
-## suche die struktur
+### structured data search
+### suche die struktur
 
 ![usage](https://raw.githubusercontent.com/monsterkodi/sds/master/img/sds-h.png)
 
