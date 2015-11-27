@@ -1,6 +1,6 @@
 {
   "name": "sds",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "structured data search",
   "main": "./bin/sds",
   "author": "monsterkodi",
