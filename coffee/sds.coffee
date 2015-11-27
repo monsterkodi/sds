@@ -22,12 +22,12 @@ args = nomnom
          help: "the file to search in"
          list: false
          required: false
-      key:    { abbr: 'k', help: 'key to search' }
-      value:  { abbr: 'v', help: 'value to search' }
-      path:   { abbr: 'p', help: 'path to search' }
-      format: { abbr: 'f', help: 'output format' }
-      json:   { abbr: 'j', help: 'parse as json', flag: true }
-      cson:   { abbr: 'c', help: 'parse as cson', flag: true }
+      key:    { abbr: 'k',  help: 'key to search' }
+      value:  { abbr: 'v',  help: 'value to search' }
+      path:   { abbr: 'p',  help: 'path to search' }
+      format: { abbr: 'f',  help: 'output format' }
+      json:   { abbr: 'j',  help: 'parse as json', flag: true }
+      cson:   { abbr: 'c',  help: 'parse as cson', flag: true }
    .help chalk.blue("Format:\n") + """
     \   #k key
     \   #v value
@@ -59,17 +59,20 @@ extname =
     else
         path.extname args.file
     
-if extname not in ['.json', '.cson']
-    err "unknown file type: #{chalk.yellow.bold(extname)}. use --json or --cson to force parsing."
+if extname not in ['.json', '.cson', '.plist']
+    err "unknown file type: #{chalk.yellow.bold(extname)}. use --json, --cson to force parsing."
 
-str = fs.readFileSync args.file
+if extname == '.plist'
+    data = require('simple-plist').readFileSync args.file
+else
+    str = fs.readFileSync args.file
 
-if str.length <= 0
-    err "empty file: #{chalk.yellow.bold(args.file)}"
+    if str.length <= 0
+        err "empty file: #{chalk.yellow.bold(args.file)}"
 
-switch extname
-    when '.json' then data = JSON.parse str
-    when '.cson' then data = require('cson').parse str
+    switch extname
+        when '.json'  then data = JSON.parse str
+        when '.cson'  then data = require('cson').parse str
 
 if not (data.constructor.name in ['Array', 'Object'])
     err "no structure in file: #{chalk.yellow.bold(args.file)}"

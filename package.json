@@ -25,7 +25,8 @@
     "coffee-script": "^1.10.0",
     "cson": "^3.0.2",
     "lodash": "^3.10.1",
-    "nomnom": "^1.8.1"
+    "nomnom": "^1.8.1",
+    "simple-plist": "0.0.4"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
