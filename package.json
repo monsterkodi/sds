@@ -1,6 +1,6 @@
 {
   "name": "sds",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "description": "structured data search",
   "main": "./bin/sds",
   "author": "monsterkodi",
@@ -16,6 +16,7 @@
   "keywords": [
     "json",
     "cson",
+    "plist",
     "search",
     "commandline",
     "tool"
