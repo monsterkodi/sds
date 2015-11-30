@@ -28,7 +28,7 @@ class find
                     if func keyPath, k,v
                         result.push _.clone(keyPath, true)
                         return result if count > 0 and result.length >= count
-                    if v.constructor.name in ["Array", "Object"]
+                    if v?.constructor.name in ["Array", "Object"]
                         @traverse v, func, count, keyPath, result
                     keyPath.pop()
         return result
