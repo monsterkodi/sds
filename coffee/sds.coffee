@@ -13,23 +13,24 @@ _     = require 'lodash'
 fs    = require 'fs'
 chalk = require 'chalk'
 
-nomnom = require("nomnom")
+nomnom = require 'nomnom'
 args = nomnom
-   .script("sds")
+   .script 'sds'
    .options
       file:
          position: 0
-         help: "the file to search in"
+         help: 'the file to search in'
          list: false
          required: false
-      key:    { abbr: 'k',  help: 'key to search' }
-      value:  { abbr: 'v',  help: 'value to search' }
-      path:   { abbr: 'p',  help: 'path to search' }
-      format: { abbr: 'f',  help: 'output format' }
-      object: { abbr: 'o',  help: 'output the object', flag: true, hidden: true }
-      result: { abbr: 'r',  help: 'output the value',  flag: true, hidden: true }
-      json:   { abbr: 'j',  help: 'parse as json', flag: true }
-      cson:   { abbr: 'c',  help: 'parse as cson', flag: true }
+      key:     { abbr: 'k',  help: 'key to search' }
+      value:   { abbr: 'v',  help: 'value to search' }
+      path:    { abbr: 'p',  help: 'path to search' }
+      format:  { abbr: 'f',  help: 'output format' }
+      object:  { abbr: 'o',  help: 'output the object', flag: true, hidden: true }
+      result:  { abbr: 'r',  help: 'output the value',  flag: true, hidden: true }
+      json:    { abbr: 'j',  help: 'parse as json', flag: true }
+      cson:    { abbr: 'c',  help: 'parse as cson', flag: true }
+      version: { abbr: 'V',  help: 'output version', flag: true, hidden: true }
    .help chalk.blue("Format:\n") + """
     \   #k key
     \   #v value
@@ -48,9 +49,14 @@ err = (msg) ->
     log chalk.red("\n"+msg+"\n")
     process.exit()
 
+if args.version
+    cp = require 'child_process'
+    log String cp.execSync "#{__dirname}/../bin/sds #{__dirname}/../package.json -k version -r"
+    process.exit()
+
 if not args.file?
     log nomnom.getUsage()
-    err "no input file provided!"
+    err 'no input file provided!'
 
 if not fs.existsSync args.file
     log nomnom.getUsage()
@@ -58,9 +64,9 @@ if not fs.existsSync args.file
 
 extname =     
     if args.json?
-        ".json"
+        '.json'
     else if args.cson?
-        ".cson"
+        '.cson'
     else
         path.extname args.file
     
