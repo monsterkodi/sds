@@ -26,6 +26,8 @@ args = nomnom
       value:  { abbr: 'v',  help: 'value to search' }
       path:   { abbr: 'p',  help: 'path to search' }
       format: { abbr: 'f',  help: 'output format' }
+      object: { abbr: 'o',  help: 'output the object', flag: true, hidden: true }
+      result: { abbr: 'r',  help: 'output the value',  flag: true, hidden: true }
       json:   { abbr: 'j',  help: 'parse as json', flag: true }
       cson:   { abbr: 'c',  help: 'parse as cson', flag: true }
    .help chalk.blue("Format:\n") + """
@@ -35,6 +37,9 @@ args = nomnom
     \   #p path
     \t 
     \   default format is "#p: #v"
+    \t
+    \   shortcuts: -o for "#o"
+    \              -r for "#v"
     \t  
    """
    .parse()
@@ -96,7 +101,12 @@ for path in result
     if value?.constructor.name in ['Array', 'Object']
         value = JSON.stringify value, null, '  '
     v = chalk.yellow.bold(value)
-    if args.format
+    if args.object
+        path.pop()
+        s = JSON.stringify find.keyPath(data, path), null, '  '
+    else if args.result
+        s = "#{v}"
+    else if args.format
         s = args.format
         s = s.replace '#k', k
         s = s.replace '#p', p
