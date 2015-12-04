@@ -5,7 +5,7 @@
 
 ### suche die struktur
 
-![expls](https://raw.githubusercontent.com/monsterkodi/sds/master/img/sds-k.png)
+![suche](https://raw.githubusercontent.com/monsterkodi/sds/master/img/sds-k.png)
 
 ### also reads plists
 
