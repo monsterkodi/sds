@@ -55,10 +55,12 @@ if args.version
     process.exit()
 
 if not args.file?
-    log nomnom.getUsage()
-    err 'no input file provided!'
-
-if not fs.existsSync args.file
+    if fs.existsSync './package.json'
+        args.file = './package.json'
+    else
+        log nomnom.getUsage()
+        err 'no input file provided!'
+else if not fs.existsSync args.file
     log nomnom.getUsage()
     err "can't find file: #{chalk.yellow.bold(args.file)}"
 
