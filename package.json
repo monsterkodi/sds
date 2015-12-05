@@ -2,7 +2,7 @@
   "name": "sds",
   "version": "1.0.1",
   "description": "structured data search",
-  "main": "./bin/sds",
+  "main": "./js/main.js",
   "author": "monsterkodi",
   "license": "Unlicense",
   "bin": {
@@ -16,10 +16,16 @@
   "keywords": [
     "json",
     "cson",
+    "noon",
+    "yml",    
     "plist",
+    "data",
+    "load",
+    "find",
     "search",
     "commandline",
-    "tool"
+    "tool",
+    "cli"
   ],
   "dependencies": {
     "chalk": "^1.1.1",

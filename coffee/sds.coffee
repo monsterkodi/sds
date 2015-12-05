@@ -6,15 +6,16 @@
 0000000   0000000    0000000 
 ###
 
-log   = require './log'
-find  = require './find'
-path  = require 'path'
 _     = require 'lodash'
 fs    = require 'fs'
+path  = require 'path'
 chalk = require 'chalk'
+nom   = require 'nomnom'
+log   = require './log'
+find  = require './find'
+load  = require './load'
 
-nomnom = require 'nomnom'
-args = nomnom
+args = nom
    .script 'sds'
    .options
       file:
@@ -30,6 +31,8 @@ args = nomnom
       result:  { abbr: 'r',  help: 'output the value',  flag: true, hidden: true }
       json:    { abbr: 'j',  help: 'parse as json', flag: true }
       cson:    { abbr: 'c',  help: 'parse as cson', flag: true }
+      noon:    { abbr: 'n',  help: 'parse as noon', flag: true }
+      yml:     { abbr: 'y',  help: 'parse as yml',  flag: true }
       version: { abbr: 'V',  help: 'output version', flag: true, hidden: true }
    .help chalk.blue("Format:\n") + """
     \   #k key
@@ -65,27 +68,17 @@ else if not fs.existsSync args.file
     err "can't find file: #{chalk.yellow.bold(args.file)}"
 
 extname =     
-    if args.json?
-        '.json'
-    else if args.cson?
-        '.cson'
+    if      args.json? then '.json'
+    else if args.cson? then '.cson'
+    else if args.noon? then '.noon'
+    else if args.yml?  then '.yml'
     else
         path.extname args.file
     
-if extname not in ['.json', '.cson', '.plist']
-    err "unknown file type: #{chalk.yellow.bold(extname)}. use --json, --cson to force parsing."
+if extname not in ['.json', '.cson', '.plist', '.noon', 'yml']
+    err "unknown file type: #{chalk.yellow.bold(extname)}. use --json --cson --noon or --yml to force parsing."
 
-if extname == '.plist'
-    data = require('simple-plist').readFileSync args.file
-else
-    str = fs.readFileSync args.file
-
-    if str.length <= 0
-        err "empty file: #{chalk.yellow.bold(args.file)}"
-
-    switch extname
-        when '.json'  then data = JSON.parse str
-        when '.cson'  then data = require('cson').parse str
+data = load args.file
 
 if not (data.constructor.name in ['Array', 'Object'])
     err "no structure in file: #{chalk.yellow.bold(args.file)}"
