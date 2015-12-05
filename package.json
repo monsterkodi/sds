@@ -1,6 +1,6 @@
 {
   "name": "sds",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "structured data search",
   "main": "./js/main.js",
   "author": "monsterkodi",
@@ -17,7 +17,7 @@
     "json",
     "cson",
     "noon",
-    "yml",    
+    "yml",
     "plist",
     "data",
     "load",
