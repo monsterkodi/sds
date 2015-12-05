@@ -18,7 +18,7 @@ load = (p) ->
     if extname == '.plist'
         require('simple-plist').readFileSync p
     else
-        str = fs.readFileSync p
+        str = fs.readFileSync p, 'utf8'
         if str.length <= 0
             err "empty file: #{chalk.yellow.bold(p)}"
             return null 

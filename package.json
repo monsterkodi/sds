@@ -33,6 +33,7 @@
     "cson": "^3.0.2",
     "lodash": "^3.10.1",
     "nomnom": "^1.8.1",
+    "noon": "0.0.4",
     "simple-plist": "0.0.4"
   },
   "devDependencies": {
