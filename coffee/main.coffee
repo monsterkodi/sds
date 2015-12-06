@@ -7,6 +7,6 @@
 ###
 
 module.exports = 
-    extnames: ['.json', '.cson', '.noon', '.plist', '.yml', 'yaml']
+    extnames: ['.json', '.cson', '.noon', '.plist', '.yml', '.yaml']
     load: require './load'
     find: require './find'

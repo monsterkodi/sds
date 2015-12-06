@@ -17,12 +17,14 @@
     "json",
     "cson",
     "noon",
+    "yaml,"
     "yml",
     "plist",
     "data",
     "load",
     "find",
     "search",
+    "convert",
     "commandline",
     "tool",
     "cli"
@@ -34,8 +36,8 @@
     "js-yaml": "^3.4.6",
     "lodash": "^3.10.1",
     "nomnom": "^1.8.1",
-    "noon": "0.0.4",
-    "simple-plist": "0.0.4"
+    "noon": "^0.0.4",
+    "simple-plist": "^0.0.4"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
