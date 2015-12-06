@@ -100,8 +100,9 @@ else
         else
             find.value data, args.value
         
-    if args.object or args.result or args.format    
-        log ''
+    if args.object or args.result or args.format
+        if not args.result
+            log ''
         for path in result
             p = path.join '.'
             k = _.last path
