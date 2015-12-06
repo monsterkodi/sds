@@ -1,6 +1,6 @@
 {
   "name": "sds",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "description": "structured data search",
   "main": "./js/main.js",
   "author": "monsterkodi",
@@ -36,7 +36,7 @@
     "js-yaml": "^3.4.6",
     "lodash": "^3.10.1",
     "nomnom": "^1.8.1",
-    "noon": "^0.0.4",
+    "noon": "^0.1.2",
     "simple-plist": "^0.0.4"
   },
   "devDependencies": {
