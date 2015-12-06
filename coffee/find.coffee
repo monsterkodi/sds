@@ -60,6 +60,7 @@ class find
         s = s.replace /([^.]+\|[^.]+)/g, '($1)'
         s = s.replace /\./g, '\\.'
         s = s.replace /\^/g, '\\^'
+        s = s.replace /\?/g, '[^.]'
         s = s.replace /\*\*/g, '####'
         s = s.replace /\*/g, '[^.]*'
         s = s.replace /####/g, '.*'

@@ -85,13 +85,30 @@ data = load args.file
 if not (data.constructor.name in ['Array', 'Object'])
     err "no structure in file: #{chalk.yellow.bold(args.file)}"
     
+if args.colors
+    colors = 
+        key:     chalk.gray
+        path:    chalk.bold.gray
+        null:    chalk.bold.blue
+        string:  chalk.yellow
+        value:   chalk.bold.magenta
+else
+    colors = 
+        key:     (s)->s
+        path:    (s)->s
+        value:   (s)->s
+        string:  (s)->s
+        null:    (s)->s
+    
 if not args.key? and not args.value? and not args.path?
-    s = noon.stringify data, colors: args.colors
-    log args.colors and chalk.bold.yellow(s) or s
+    s = noon.stringify data, colors: colors
+    log s
     log ''
 else        
     result = 
-        if args.path?
+        if args.path? and args.value?
+            find.pathValue data, args.path, args.value
+        else if args.path?
             find.path data, args.path
         else if args.key? and args.value?
             find.keyValue data, args.key, args.value
@@ -110,14 +127,14 @@ else
 
             if args.object
                 path.pop()
-                s = noon.stringify find.keyPath(data, path), colors: args.colors
+                s = noon.stringify find.keyPath(data, path), colors: colors
             else if args.result
-                s = "#{v}"
+                s = noon.stringify v, colors: colors
             else if args.format
                 s = args.format
-                s = s.replace '@k', args.colors and chalk.gray(k) or k
-                s = s.replace '@p', args.colors and chalk.bold.gray(p) or p
-                s = s.replace '@v', noon.stringify v, colors: args.colors
+                s = s.replace '@k', colors.key k
+                s = s.replace '@p', colors.path p
+                s = s.replace '@v', noon.stringify v, colors: colors
                 if args.format.indexOf('@o') >= 0
                     path.pop()
                     o = noon.stringify find.keyPath(data, path),
@@ -126,14 +143,14 @@ else
             else
                 o = {}
                 o[p] = v
-                s = noon.stringify o, colors: args.colors
-            log args.colors and chalk.bold.yellow(s) or s
+                s = noon.stringify o, colors: colors
+            log s
     else
         o = {}
         for path in result
             o[path.join('.')] = find.keyPath data, path
-        s = noon.stringify o, colors: args.colors
-        log args.colors and chalk.bold.yellow(s) or s
+        s = noon.stringify o, colors: colors
+        log s
         
     if not args.result
         log ''
