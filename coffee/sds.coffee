@@ -32,7 +32,7 @@ args = nom
       json:    { abbr: 'j',  help: 'parse as json', flag: true }
       cson:    { abbr: 'c',  help: 'parse as cson', flag: true }
       noon:    { abbr: 'n',  help: 'parse as noon', flag: true }
-      yml:     { abbr: 'y',  help: 'parse as yml',  flag: true }
+      yaml:    { abbr: 'y',  help: 'parse as yaml', flag: true }
       version: { abbr: 'V',  help: 'output version', flag: true, hidden: true }
    .help chalk.blue("Format:\n") + """
     \   #k key
@@ -71,12 +71,12 @@ extname =
     if      args.json? then '.json'
     else if args.cson? then '.cson'
     else if args.noon? then '.noon'
-    else if args.yml?  then '.yml'
+    else if args.yaml? then '.yaml'
     else
         path.extname args.file
     
-if extname not in ['.json', '.cson', '.plist', '.noon', 'yml']
-    err "unknown file type: #{chalk.yellow.bold(extname)}. use --json --cson --noon or --yml to force parsing."
+if extname not in ['.json', '.cson', '.plist', '.noon', '.yml', '.yaml']
+    err "unknown file type: #{chalk.yellow.bold(extname)}. use --json --cson --noon or --yaml to force parsing."
 
 data = load args.file
 

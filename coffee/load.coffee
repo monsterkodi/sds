@@ -27,7 +27,7 @@ load = (p) ->
             when '.json' then JSON.parse str
             when '.cson' then require('cson').parse str
             when '.noon' then require('noon').parse str
-            when '.yml'  then require('js-yaml').safeLoad str
+            when '.yml', '.yaml' then require('js-yaml').load str
             else
                 err "unknown file type: #{chalk.yellow.bold(extname)}"
                 null
