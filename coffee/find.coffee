@@ -10,6 +10,69 @@ _ = require 'lodash'
 
 class find
 
+    @value: (node, val) -> 
+        valReg = @reg val         
+        @traverse node, (p,k,v) => @match v, valReg
+        
+    @key: (node, key) -> 
+        keyReg = @reg key 
+        @traverse node, (p,k,v) => @match k, keyReg
+        
+    @path: (node, path) -> 
+        pthReg = @reg path
+        @traverse node, (p,k,v) => @matchPath(p, pthReg)
+        
+    @pathValue:(node, path, val) -> 
+        pthReg = @reg path
+        valReg = @reg val         
+        @traverse node, (p,k,v) => @matchPath(p, pthReg) and @match(v, valReg)
+        
+    @keyValue: (node, key, val) -> 
+        keyReg = @reg key 
+        valReg = @reg val 
+        @traverse node, (p,k,v) => @match(k, keyReg) and @match(v, valReg)
+
+    ###
+    00     00   0000000   000000000   0000000  000   000
+    000   000  000   000     000     000       000   000
+    000000000  000000000     000     000       000000000
+    000 0 000  000   000     000     000       000   000
+    000   000  000   000     000      0000000  000   000
+    ###
+    
+    @matchPath: (a, r) -> @match a.join('.'), r
+        
+    @match: (a,r) ->
+        if not _.isArray a
+            String(a).match(r)?.length
+        else
+            false
+
+    ###
+    00000000   00000000   0000000 
+    000   000  000       000      
+    0000000    0000000   000  0000
+    000   000  000       000   000
+    000   000  00000000   0000000 
+    ###
+    
+    @reg: (s) -> 
+        s = s.replace /([^.]+\|[^.]+)/g, '($1)'
+        s = s.replace /\./g, '\\.'
+        s = s.replace /\*\*/g, '^^'
+        s = s.replace /\*/g, '[^.]*'
+        s = s.replace /\^\^/g, '.*'
+        # log s
+        new RegExp "^"+s+"$"
+
+    ###
+    000000000  00000000    0000000   000   000  00000000  00000000    0000000  00000000
+       000     000   000  000   000  000   000  000       000   000  000       000     
+       000     0000000    000000000   000 000   0000000   0000000    0000000   0000000 
+       000     000   000  000   000     000     000       000   000       000  000     
+       000     000   000  000   000      0      00000000  000   000  0000000   00000000
+    ###
+    
     @traverse: (node, func, count=-1, keyPath=[], result=[]) ->
         switch node.constructor.name
             when "Array"
@@ -33,25 +96,19 @@ class find
                     keyPath.pop()
         return result
 
-    @keyValue: (node, key, value) -> @traverse node, (p,k,v) => @match(k, key) and @match(v, value)
-    @key:      (node, key)        -> @traverse node, (p,k,v) => @match(k, key)
-    @value:    (node, value)      -> @traverse node, (p,k,v) => @match(v, value)
-    @path:     (node, path)       -> @traverse node, (p,k,v) => @match(p.join('.'), path)
-
+    ###
+    000   000  00000000  000   000  00000000    0000000   000000000  000   000
+    000  000   000        000 000   000   000  000   000     000     000   000
+    0000000    0000000     00000    00000000   000000000     000     000000000
+    000  000   000          000     000        000   000     000     000   000
+    000   000  00000000     000     000        000   000     000     000   000
+    ###
+    
     @keyPath:  (node, keyPath) ->
         kp = _.clone keyPath
         while kp.length
             node = node[kp.shift()]
             return if not node?
         node
-        
-    @match: (a,b) ->
-        if _.isString(a) and _.isString(b)
-            p = _.clone(b)
-            p = p.replace /\*/g, '.*'
-            p = "^"+p+"$"
-            a.match(new RegExp(p))?.length
-        else
-            a == b
         
 module.exports = find
