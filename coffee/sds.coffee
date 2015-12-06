@@ -34,7 +34,7 @@ args = nom
       cson:    { abbr: 'c',  help: 'parse as cson', flag: true }
       noon:    { abbr: 'n',  help: 'parse as noon', flag: true }
       yaml:    { abbr: 'y',  help: 'parse as yaml', flag: true }
-      colors:  { toggle: true, default: true, 'highlight output with ansi colors'}
+      colors:  { toggle: true, default: true, help: 'use ansi colors'}
       version: { abbr: 'V',  help: 'output version', flag: true, hidden: true }
    .help chalk.blue("Format:\n") + """
     \   #k key
@@ -42,7 +42,7 @@ args = nom
     \   #o object
     \   #p path
     \t 
-    \   default format is "#p: #v"
+    \   default format is "#p #v"
     \t
     \   shortcuts: -o for "#o"
     \              -r for "#v"
@@ -101,6 +101,7 @@ else
             find.value data, args.value
         
     if args.object or args.result or args.format    
+        log ''
         for path in result
             p = path.join '.'
             k = _.last path
