@@ -37,15 +37,15 @@ args = nom
       colors:  { toggle: true, default: true, help: 'use ansi colors'}
       version: { abbr: 'V',  help: 'output version', flag: true, hidden: true }
    .help chalk.blue("Format:\n") + """
-    \   #k key
-    \   #v value
-    \   #o object
-    \   #p path
+    \   @k key
+    \   @v value
+    \   @o object
+    \   @p path
     \t 
-    \   default format is "#p #v"
+    \   default format is "@p @v"
     \t
-    \   shortcuts: -o for "#o"
-    \              -r for "#v"
+    \   shortcuts: -o for @o
+    \              -r for @v and no leading empty line
     \t  
    """
    .parse()
@@ -115,14 +115,14 @@ else
                 s = "#{v}"
             else if args.format
                 s = args.format
-                s = s.replace '#k', args.colors and chalk.gray(k) or k
-                s = s.replace '#p', args.colors and chalk.bold.gray(p) or p
-                s = s.replace '#v', noon.stringify v, colors: args.colors
-                if args.format.indexOf('#o') >= 0
+                s = s.replace '@k', args.colors and chalk.gray(k) or k
+                s = s.replace '@p', args.colors and chalk.bold.gray(p) or p
+                s = s.replace '@v', noon.stringify v, colors: args.colors
+                if args.format.indexOf('@o') >= 0
                     path.pop()
                     o = noon.stringify find.keyPath(data, path),
                         colors: true
-                    s = s.replace '#o', o
+                    s = s.replace '@o', o
             else
                 o = {}
                 o[p] = v

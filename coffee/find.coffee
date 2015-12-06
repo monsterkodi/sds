@@ -59,9 +59,10 @@ class find
     @reg: (s) -> 
         s = s.replace /([^.]+\|[^.]+)/g, '($1)'
         s = s.replace /\./g, '\\.'
-        s = s.replace /\*\*/g, '^^'
+        s = s.replace /\^/g, '\\^'
+        s = s.replace /\*\*/g, '####'
         s = s.replace /\*/g, '[^.]*'
-        s = s.replace /\^\^/g, '.*'
+        s = s.replace /####/g, '.*'
         # log s
         new RegExp "^"+s+"$"
 
