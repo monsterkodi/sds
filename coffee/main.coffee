@@ -7,7 +7,8 @@
 ###
 
 module.exports = 
-    extnames:  ['.json', '.cson', '.noon', '.plist', '.yml', '.yaml']
+    extnames:   ['.json', '.cson', '.noon', '.plist', '.yml', '.yaml']
+    extensions: [ 'json',  'cson',  'noon',  'plist',  'yml',  'yaml']
     stringify: require './stringify'
     load:      require './load'
     save:      require './save'
