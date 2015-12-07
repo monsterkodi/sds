@@ -57,6 +57,7 @@ class find
     ###
     
     @reg: (s) -> 
+        s = String s
         s = s.replace /([^.]+\|[^.]+)/g, '($1)'
         s = s.replace /\./g, '\\.'
         s = s.replace /\^/g, '\\^'
