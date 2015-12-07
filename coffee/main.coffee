@@ -12,3 +12,4 @@ module.exports =
     load:      require './load'
     save:      require './save'
     find:      require './find'
+    get:       require './get'

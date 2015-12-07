@@ -13,6 +13,7 @@ chalk = require 'chalk'
 noon  = require 'noon'
 nom   = require 'nomnom'
 log   = require './log'
+get   = require './get'
 find  = require './find'
 load  = require './load'
 
@@ -123,11 +124,11 @@ else
         for path in result
             p = path.join '.'
             k = _.last path
-            v = find.keyPath data, path
+            v = get data, path
 
             if args.object
                 path.pop()
-                s = noon.stringify find.keyPath(data, path), colors: colors
+                s = noon.stringify get(data, path), colors: colors
             else if args.result
                 s = noon.stringify v, colors: colors
             else if args.format
@@ -137,7 +138,7 @@ else
                 s = s.replace '@v', noon.stringify v, colors: colors
                 if args.format.indexOf('@o') >= 0
                     path.pop()
-                    o = noon.stringify find.keyPath(data, path),
+                    o = noon.stringify get(data, path),
                         colors: true
                     s = s.replace '@o', o
             else
@@ -148,7 +149,7 @@ else
     else
         o = {}
         for path in result
-            o[path.join('.')] = find.keyPath data, path
+            o[path.join('.')] = get data, path
         s = noon.stringify o, colors: colors
         log s
         

@@ -97,20 +97,5 @@ class find
                         @traverse v, func, count, keyPath, result
                     keyPath.pop()
         return result
-
-    ###
-    000   000  00000000  000   000  00000000    0000000   000000000  000   000
-    000  000   000        000 000   000   000  000   000     000     000   000
-    0000000    0000000     00000    00000000   000000000     000     000000000
-    000  000   000          000     000        000   000     000     000   000
-    000   000  00000000     000     000        000   000     000     000   000
-    ###
-    
-    @keyPath:  (node, keyPath) ->
-        kp = _.clone keyPath
-        while kp.length
-            node = node[kp.shift()]
-            return if not node?
-        node
         
 module.exports = find
