@@ -12,7 +12,7 @@ plumber  = require 'gulp-plumber'
 onError = (err) -> gutil.log err
 
 gulp.task 'coffee', ['salt'], ->
-    gulp.src ['coffee/**/*.coffee'], base: '.'
+    gulp.src ['coffee/**/*.coffee'], base: './coffee'
         .pipe plumber()
         # .pipe debug title: 'coffee'
         .pipe pepper
