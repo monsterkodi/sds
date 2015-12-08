@@ -6,7 +6,8 @@
 000       000  000   000  0000000  
 ###
 
-_ = require 'lodash'
+_      = require 'lodash'
+regexp = require './regexp'
 
 class find
 
@@ -56,17 +57,7 @@ class find
     000   000  00000000   0000000 
     ###
     
-    @reg: (s) -> 
-        s = String s
-        s = s.replace /([^.]+\|[^.]+)/g, '($1)'
-        s = s.replace /\./g, '\\.'
-        s = s.replace /\^/g, '\\^'
-        s = s.replace /\?/g, '[^.]'
-        s = s.replace /\*\*/g, '####'
-        s = s.replace /\*/g, '[^.]*'
-        s = s.replace /####/g, '.*'
-        # log s
-        new RegExp "^"+s+"$"
+    @reg: (s) -> regexp s
 
     ###
     000000000  00000000    0000000   000   000  00000000  00000000    0000000  00000000

@@ -14,3 +14,4 @@ module.exports =
     save:      require './save'
     find:      require './find'
     get:       require './get'
+    regexp:    require './regexp'
