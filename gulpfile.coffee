@@ -21,6 +21,12 @@ gulp.task 'coffee', ['salt'], ->
                 dbg: 'log'
         .pipe coffee(bare: true).on('error', onError)
         .pipe gulp.dest 'js/'
+
+gulp.task 'coffee_release', ->
+    gulp.src ['coffee/**/*.coffee'], base: './coffee'
+        .pipe plumber()
+        .pipe coffee(bare: true).on('error', onError)
+        .pipe gulp.dest 'js/'
     
 gulp.task 'salt', ->
     gulp.src ['coffee/**/*.coffee'], base: '.'
@@ -41,7 +47,7 @@ gulp.task 'bump', (cb) ->
         .pipe gulp.dest '.'
     cb()
 
-gulp.task 'release', ['clean', 'bump', 'coffee'], ->
+gulp.task 'release', ['clean', 'bump', 'coffee_release'], ->
 
 gulp.task 'default', ->
                 
