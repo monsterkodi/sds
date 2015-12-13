@@ -29,7 +29,6 @@ load = (p) ->
             when '.noon' then require('noon').parse str
             when '.yml', '.yaml' then require('js-yaml').load str
             else
-                err "unknown file type: #{chalk.yellow.bold(extname)}"
-                null
+                require('noon').parse str
 
 module.exports = load
