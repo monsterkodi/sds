@@ -36,9 +36,7 @@ gulp.task 'salt', ->
         .pipe gulp.dest '.'
 
 gulp.task 'clean', (cb) ->
-    del [
-        'js'
-    ]
+    del [ 'js' ]
     cb()
 
 gulp.task 'bump', (cb) ->
