@@ -1,20 +1,14 @@
-del      = require 'del'
-path     = require 'path'
-gulp     = require 'gulp'
-coffee   = require 'gulp-coffee'
-pepper   = require 'gulp-pepper'
-salt     = require 'gulp-salt'
-gutil    = require 'gulp-util'
-bump     = require 'gulp-bump'
-debug    = require 'gulp-debug'
-plumber  = require 'gulp-plumber'
+del  = require 'del'
+path = require 'path'
+gulp = require 'gulp'
+p    = require('gulp-load-plugins') lazy:false
+(eval "#{k} = p.#{k}" for k,v of p)
  
-onError = (err) -> gutil.log err
+onError = (err) -> util.log err
 
-gulp.task 'coffee', ['salt'], ->
+gulp.task 'coffee', ->
     gulp.src ['coffee/**/*.coffee'], base: './coffee'
         .pipe plumber()
-        .pipe debug title: 'coffee'
         .pipe pepper
             stringify: (info) -> '"'+info.class + info.type + info.method + ' ► "'
             paprika: 
@@ -25,28 +19,30 @@ gulp.task 'coffee', ['salt'], ->
 gulp.task 'coffee_release', ->
     gulp.src ['coffee/**/*.coffee'], base: './coffee'
         .pipe plumber()
+        .pipe pepper
+            stringify: -> '""'
+            paprika: 
+                dbg: 'log'
         .pipe coffee(bare: true).on('error', onError)
         .pipe gulp.dest 'js/'
     
 gulp.task 'salt', ->
     gulp.src ['coffee/**/*.coffee'], base: '.'
         .pipe plumber()
-        .pipe debug title: 'salt'
         .pipe salt()
         .pipe gulp.dest '.'
 
-gulp.task 'clean', (cb) ->
-    del [ 'js' ]
-    cb()
-
-gulp.task 'bump', (cb) ->
+gulp.task 'bump', ->
     gulp.src './package.json'
         .pipe bump()
         .pipe gulp.dest '.'
-    cb()
 
-gulp.task 'release', ['clean', 'bump', 'coffee_release'], ->
+gulp.task 'clean', (cb) ->
+    del.sync [ 'js' ]
+    cb()
+    
+gulp.task 'release', ['clean', 'coffee_release']
 
 gulp.task 'default', ->
                 
-    gulp.watch ['coffee/**/*.coffee'], ['salt', 'coffee']
+    gulp.watch 'coffee/**/*.coffee', ['salt']

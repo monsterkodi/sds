@@ -1,6 +1,6 @@
 {
   "name": "sds",
-  "version": "1.3.4",
+  "version": "1.4.0",
   "description": "structured data search",
   "main": "./js/main.js",
   "author": "monsterkodi",
@@ -35,7 +35,7 @@
     "js-yaml": "^3.4.6",
     "lodash": "^3.10.1",
     "nomnom": "^1.8.1",
-    "noon": "^0.1.6",
+    "noon": ">=0.3.1",
     "simple-plist": "^0.0.4"
   },
   "devDependencies": {
@@ -45,6 +45,7 @@
     "gulp-bump": "^1.0.0",
     "gulp-coffee": "^2.3.1",
     "gulp-debug": "^2.1.2",
+    "gulp-load-plugins": "^1.1.0",
     "gulp-pepper": "^0.9.1",
     "gulp-plumber": "^1.0.1",
     "gulp-salt": "^0.1.4",
