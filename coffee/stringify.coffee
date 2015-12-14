@@ -13,7 +13,7 @@ defaults =
     indent: '    '
 
 stringify = (data, options={}) ->
-    opt = _.assign defaults, options
+    opt = _.assign _.clone(defaults), options
     switch opt.ext
         when '.json'  then JSON.stringify data, null, opt.indent
         when '.cson'  then require('cson').stringify data, null, opt.indent
