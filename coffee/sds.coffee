@@ -12,10 +12,10 @@ path  = require 'path'
 chalk = require 'chalk'
 noon  = require 'noon'
 nom   = require 'nomnom'
-log   = require './log'
 get   = require './get'
 find  = require './find'
 load  = require './load'
+log   = console.log
 
 args = nom
    .script 'sds'

@@ -19,10 +19,6 @@ gulp.task 'coffee', ->
 gulp.task 'coffee_release', ->
     gulp.src ['coffee/**/*.coffee'], base: './coffee'
         .pipe plumber()
-        .pipe pepper
-            stringify: -> '""'
-            paprika: 
-                dbg: 'log'
         .pipe coffee(bare: true).on('error', onError)
         .pipe gulp.dest 'js/'
     

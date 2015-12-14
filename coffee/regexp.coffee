@@ -15,7 +15,6 @@ regexp = (s) ->
     s = s.replace /\*\*/g, '####'
     s = s.replace /\*/g, '[^.]*'
     s = s.replace /####/g, '.*'
-    # log s
     new RegExp "^"+s+"$"
 
 module.exports = regexp
