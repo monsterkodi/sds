@@ -35,7 +35,7 @@
     "js-yaml": "^3.4.6",
     "lodash": "^3.10.1",
     "nomnom": "^1.8.1",
-    "noon": ">=0.4.3",
+    "noon": ">=0.5.2",
     "simple-plist": "^0.0.4"
   },
   "devDependencies": {
