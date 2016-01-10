@@ -27,8 +27,8 @@ keywords
 dependencies    
                 chalk           ^1.1.1
                 cson            ^3.0.2
-                js-yaml         ^3.4.6
+                js-yaml         ^3.5.0
                 lodash          ^3.10.1
                 simple-plist    ^0.0.4
-                noon            >=0.6.4
-                karg            >=0.1.5
+                noon            >=0.6.6
+                karg            >=0.1.6

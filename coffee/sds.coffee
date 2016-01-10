@@ -17,29 +17,32 @@ load  = require './load'
 log   = console.log
 
 args = require('karg') """
-    sds
-        file        . ? the file to search in    . *
-        key         . ? key to search            
-        value       . ? value to search
-        path        . ? path to search           
-        format      . ? output format            
-        json        . ? parse as json            . = false
-        noon        . ? parse as noon            . = false
-        cson        . - C                        . = false
-        yaml                                     . = false
-        object                                   . = false
-        result                                   . = false
-        colors      . ? output with ansi colors  . = true
-        version     . - V . = #{require("#{__dirname}/../package.json").version}
-    format
-        @k  key
-        @v  value
-        @o  object
-        @p  path
-    shortcuts 
-        -o  for @o
-        -r  for @v and no leading empty line
-    """
+sds
+    file        . ? the file to search in    . *
+    key         . ? key to search            
+    value       . ? value to search
+    path        . ? path to search           
+    format      . ? output format            
+    json        . ? parse as json            . = false
+    noon        . ? parse as noon            . = false
+    cson        . - C                        . = false
+    yaml                                     . = false
+    object                                   . = false
+    result                                   . = false
+    colors      . ? output with ansi colors  . = true
+    
+format
+    @k  key
+    @v  value
+    @o  object
+    @p  path
+    
+shortcuts 
+    -o  for @o
+    -r  for @v and no leading empty line
+
+version     #{require("#{__dirname}/../package.json").version}
+"""
 
 err = (msg) ->
     log chalk.red("\n"+msg+"\n")
