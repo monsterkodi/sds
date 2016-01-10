@@ -6,11 +6,11 @@
 0000000   0000000   000   000  0000000  
 ###
 
-fs    = require 'fs'
-chalk = require 'chalk'
-path  = require 'path'
+fs     = require 'fs'
+colors = require 'colors'
+path   = require 'path'
 
-err  = (msg) -> console.log chalk.red("\n"+msg+"\n")
+err  = (msg) -> console.log ("\n"+msg+"\n").red
 
 load = (p) ->
     
@@ -20,7 +20,7 @@ load = (p) ->
     else
         str = fs.readFileSync p, 'utf8'
         if str.length <= 0
-            err "empty file: #{chalk.yellow.bold(p)}"
+            err "empty file: #{p.yellow.bold}"
             return null 
             
         switch extname
