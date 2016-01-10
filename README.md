@@ -35,7 +35,7 @@ if path.extname(infile) in sds.extnames
     
     sds.stringify obj, ext: '.yaml'
     
-    # or save to disk (format is deducted from extension)
+    # or save to disk (format is deduced from extension)
     
     sds.save outfile, obj
     
