@@ -86,9 +86,13 @@ else
     
 if not args.key? and not args.value? and not args.path?
     s = noon.stringify data, colors: colors
+    log ''
     log s
     log ''
 else        
+    if not args.result
+        log ''
+        
     result = 
         if args.path? and args.value?
             find.pathValue data, args.path, args.value
@@ -102,8 +106,6 @@ else
             find.value data, args.value
         
     if args.object or args.result or args.format
-        if not args.result
-            log ''
         for path in result
             p = path.join '.'
             k = _.last path
