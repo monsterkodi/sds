@@ -1,5 +1,5 @@
 name            sds
-version         1.4.8
+version         1.4.9
 description     structured data search
 main            ./js/main.js
 author          monsterkodi
@@ -31,4 +31,4 @@ dependencies
                 lodash          ^3.10.1
                 simple-plist    ^0.0.4
                 noon            >=0.6.6
-                karg            >=0.1.6
+                karg            >=0.1.7
