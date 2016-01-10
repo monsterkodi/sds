@@ -1,40 +1,40 @@
 {
-    "name": "sds",
-    "version": "1.4.10",
-    "description": "structured data search",
-    "main": "./js/main.js",
-    "author": "monsterkodi",
-    "license": "Unlicense",
-    "bin": {
-        "sds": "./bin/sds"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git://github.com/monsterkodi/sds"
-    },
-    "preferGlobal": true,
-    "keywords": [
-        "json",
-        "cson",
-        "noon",
-        "yaml",
-        "yml",
-        "plist",
-        "data",
-        "load",
-        "find",
-        "search",
-        "convert",
-        "commandline tool",
-        "cli"
-    ],
-    "dependencies": {
-        "colors": "^1.1.2",
-        "cson": "^3.0.2",
-        "js-yaml": "^3.5.0",
-        "lodash": "^3.10.1",
-        "simple-plist": "^0.0.4",
-        "karg": ">=0.1.8",
-        "noon": ">=0.6.6"
-    }
+  "name": "sds",
+  "version": "1.4.11",
+  "description": "structured data search",
+  "main": "./js/main.js",
+  "author": "monsterkodi",
+  "license": "Unlicense",
+  "bin": {
+    "sds": "./bin/sds"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/monsterkodi/sds"
+  },
+  "preferGlobal": true,
+  "keywords": [
+    "json",
+    "cson",
+    "noon",
+    "yaml",
+    "yml",
+    "plist",
+    "data",
+    "load",
+    "find",
+    "search",
+    "convert",
+    "commandline tool",
+    "cli"
+  ],
+  "dependencies": {
+    "colors": "^1.1.2",
+    "cson": "^3.0.2",
+    "js-yaml": "^3.5.0",
+    "lodash": "^3.10.1",
+    "simple-plist": "^0.0.4",
+    "karg": ">=0.1.8",
+    "noon": ">=0.6.6"
+  }
 }
