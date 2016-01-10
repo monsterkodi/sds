@@ -1,0 +1,34 @@
+name            sds
+version         1.4.7
+description     structured data search
+main            ./js/main.js
+author          monsterkodi
+license         Unlicense
+bin             
+                sds     ./bin/sds
+repository      
+                type    git
+                url     git://github.com/monsterkodi/sds
+preferGlobal    true
+keywords        
+                json
+                cson
+                noon
+                yaml
+                yml
+                plist
+                data
+                load
+                find
+                search
+                convert
+                commandline tool
+                cli
+dependencies    
+                chalk           ^1.1.1
+                cson            ^3.0.2
+                js-yaml         ^3.4.6
+                lodash          ^3.10.1
+                simple-plist    ^0.0.4
+                noon            >=0.5.2
+                karg            >=0.1.0

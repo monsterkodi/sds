@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 cd "`dirname $0`/.."
-gulp bump
-gulp release
+NAME=`sds -rp name`
+bump
+touch "coffee/$NAME.coffee"
 git add .
 git commit -m "v`sds -rp version`" 
 git push
 npm publish
-npm install -g `sds -rp name`
+npm install -g $NAME
