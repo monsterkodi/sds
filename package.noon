@@ -1,5 +1,5 @@
 name            sds
-version         1.4.9
+version         1.4.10
 description     structured data search
 main            ./js/main.js
 author          monsterkodi
@@ -25,10 +25,10 @@ keywords
                 commandline tool
                 cli
 dependencies    
-                chalk           ^1.1.1
+                colors          ^1.1.2
                 cson            ^3.0.2
                 js-yaml         ^3.5.0
                 lodash          ^3.10.1
                 simple-plist    ^0.0.4
+                karg            >=0.1.8
                 noon            >=0.6.6
-                karg            >=0.1.7

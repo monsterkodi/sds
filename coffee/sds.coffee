@@ -6,15 +6,15 @@
 0000000   0000000    0000000 
 ###
 
-_     = require 'lodash'
-fs    = require 'fs'
-path  = require 'path'
-chalk = require 'chalk'
-noon  = require 'noon'
-get   = require './get'
-find  = require './find'
-load  = require './load'
-log   = console.log
+_      = require 'lodash'
+fs     = require 'fs'
+path   = require 'path'
+colors = require 'colors'
+noon   = require 'noon'
+get    = require './get'
+find   = require './find'
+load   = require './load'
+log    = console.log
 
 args = require('karg') """
 sds
@@ -45,7 +45,7 @@ version     #{require("#{__dirname}/../package.json").version}
 """
 
 err = (msg) ->
-    log chalk.red("\n"+msg+"\n")
+    log ("\n"+msg+"\n").red
     process.exit()
 
 if not args.file?
@@ -54,7 +54,7 @@ if not args.file?
     else
         err 'no input file provided!'
 else if not fs.existsSync args.file
-    err "can't find file: #{chalk.yellow.bold(args.file)}"
+    err "can't find file: #{args.file.yellow.bold}"
 
 extname =     
     if      args.json then '.json'
@@ -65,20 +65,20 @@ extname =
         path.extname args.file
     
 if extname not in ['.json', '.cson', '.plist', '.noon', '.yml', '.yaml']
-    err "unknown file type: #{chalk.yellow.bold(extname)}. use --json --cson --noon or --yaml to force parsing."
+    err "unknown file type: #{extname.yellow.bold}. use --json --cson --noon or --yaml to force parsing."
 
 data = load args.file
 
 if not (data.constructor.name in ['Array', 'Object'])
-    err "no structure in file: #{chalk.yellow.bold(args.file)}"
+    err "no structure in file: #{args.file.yellow.bold}"
     
 if args.colors
     colors = 
-        key:     chalk.gray
-        path:    chalk.bold.gray
-        null:    chalk.bold.blue
-        string:  chalk.yellow
-        value:   chalk.bold.magenta
+        key:     colors.gray
+        path:    colors.bold.gray
+        null:    colors.bold.blue
+        string:  colors.yellow
+        value:   colors.bold.magenta
 else
     colors = 
         key:     (s)->s
