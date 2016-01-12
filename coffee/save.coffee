@@ -8,10 +8,11 @@
 
 fs    = require 'fs'
 path  = require 'path'
+_     = require 'lodash'
 toStr = require './stringify'
 
-save = (p, data) ->
+save = (p, data, opt={}) ->
     
-    fs.writeFileSync p, toStr data, ext: path.extname p
+    fs.writeFileSync p, toStr data, _.defaults ext: path.extname(p), opt
 
 module.exports = save
