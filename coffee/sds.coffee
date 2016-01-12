@@ -18,7 +18,7 @@ log    = console.log
 
 args = require('karg') """
 sds
-    file        . ? the file to search in    . *
+    file        . ? the file to search in    . * . = package.json
     key         . ? key to search            
     value       . ? value to search
     path        . ? path to search           
