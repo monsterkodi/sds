@@ -1,5 +1,5 @@
 name            sds
-version         1.4.17
+version         1.4.18
 description     structured data search
 main            ./js/main.js
 author          monsterkodi
@@ -31,4 +31,4 @@ dependencies
                 lodash          ^4.0.0
                 simple-plist    git://github.com/monsterkodi/node-simple-plist.git
                 karg            >=0.1.17
-                noon            >=0.6.14
+                noon            >=0.6.15
