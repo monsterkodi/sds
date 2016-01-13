@@ -30,5 +30,5 @@ dependencies
                 js-yaml         ^3.5.2
                 lodash          ^4.0.0
                 simple-plist    git://github.com/monsterkodi/node-simple-plist.git
-                karg            >=0.1.17
-                noon            >=0.6.15
+                karg            >=0.1.18
+                noon            >=0.6.16
