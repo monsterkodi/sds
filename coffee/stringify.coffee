@@ -17,7 +17,7 @@ stringify = (data, options={}) ->
     switch opt.ext
         when '.json'  then JSON.stringify data, null, opt.indent
         when '.cson'  then require('cson').stringify data, null, opt.indent
-        when '.noon'  then require('noon').stringify data
+        when '.noon'  then require('noon').stringify data, opt
         when '.plist' then require('simple-plist').stringify data
         when '.yml', '.yaml' then require('js-yaml').dump data
 

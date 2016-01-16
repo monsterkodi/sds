@@ -1,34 +1,39 @@
-name            sds
-version         1.4.20
-description     structured data search
-main            ./js/main.js
-author          monsterkodi
-license         Unlicense
-bin             
-                sds     ./bin/sds
-repository      
-                type    git
-                url     git://github.com/monsterkodi/sds
-preferGlobal    true
-keywords        
-                json
-                cson
-                noon
-                yaml
-                yml
-                plist
-                data
-                load
-                find
-                search
-                convert
-                commandline tool
-                cli
-dependencies    
-                colors          ^1.1.2
-                cson            ^3.0.2
-                js-yaml         ^3.5.2
-                lodash          ^4.0.0
-                simple-plist    git://github.com/monsterkodi/node-simple-plist.git
-                karg            >=0.1.18
-                noon            >=0.6.16
+name                sds
+version             1.4.20
+description         structured data search
+main                ./js/main.js
+author              monsterkodi
+license             Unlicense
+bin                 
+                    sds     ./bin/sds
+repository          
+                    type    git
+                    url     git://github.com/monsterkodi/sds
+preferGlobal        true
+keywords            
+                    json
+                    cson
+                    noon
+                    yaml
+                    yml
+                    plist
+                    data
+                    load
+                    find
+                    search
+                    convert
+                    commandline tool
+                    cli
+scripts             
+                    test    mocha -R dot --compilers coffee:coffee-script/register
+dependencies        
+                    colors          ^1.1.2
+                    cson            ^3.0.2
+                    js-yaml         ^3.5.2
+                    lodash          ^4.0.0
+                    simple-plist    git://github.com/monsterkodi/node-simple-plist.git
+                    karg            >=0.1.19
+                    noon            >=0.7.1
+devDependencies     
+                    chai    ^3.4.1
+                    mocha   ^2.3.4
