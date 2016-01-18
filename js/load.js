@@ -6,43 +6,47 @@
 000      000   000  000   000  000   000
 0000000   0000000   000   000  0000000
  */
-var chalk, err, fs, load, path;
 
-fs = require('fs');
+(function() {
+  var colors, err, fs, load, path;
 
-chalk = require('chalk');
+  fs = require('fs');
 
-path = require('path');
+  colors = require('colors');
 
-err = function(msg) {
-  return console.log(chalk.red("\n" + msg + "\n"));
-};
+  path = require('path');
 
-load = function(p) {
-  var extname, str;
-  extname = path.extname(p);
-  if (extname === '.plist') {
-    return require('simple-plist').readFileSync(p);
-  } else {
-    str = fs.readFileSync(p, 'utf8');
-    if (str.length <= 0) {
-      err("empty file: " + (chalk.yellow.bold(p)));
-      return null;
+  err = function(msg) {
+    return console.log(("\n" + msg + "\n").red);
+  };
+
+  load = function(p) {
+    var extname, str;
+    extname = path.extname(p);
+    if (extname === '.plist') {
+      return require('simple-plist').readFileSync(p);
+    } else {
+      str = fs.readFileSync(p, 'utf8');
+      if (str.length <= 0) {
+        err("empty file: " + p.yellow.bold);
+        return null;
+      }
+      switch (extname) {
+        case '.json':
+          return JSON.parse(str);
+        case '.cson':
+          return require('cson').parse(str);
+        case '.noon':
+          return require('noon').parse(str);
+        case '.yml':
+        case '.yaml':
+          return require('js-yaml').load(str);
+        default:
+          return require('noon').parse(str);
+      }
     }
-    switch (extname) {
-      case '.json':
-        return JSON.parse(str);
-      case '.cson':
-        return require('cson').parse(str);
-      case '.noon':
-        return require('noon').parse(str);
-      case '.yml':
-      case '.yaml':
-        return require('js-yaml').load(str);
-      default:
-        return require('noon').parse(str);
-    }
-  }
-};
+  };
 
-module.exports = load;
+  module.exports = load;
+
+}).call(this);

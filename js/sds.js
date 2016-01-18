@@ -6,220 +6,149 @@
      000  000   000       000
 0000000   0000000    0000000
  */
-var _, args, chalk, colors, cp, data, err, extname, find, fs, get, i, j, k, len, len1, load, log, nom, noon, o, p, path, ref, result, s, v;
 
-_ = require('lodash');
+(function() {
+  var _, args, colors, data, err, extname, find, fs, get, i, j, k, len, len1, load, log, noon, o, p, path, ref, result, s, v;
 
-fs = require('fs');
+  _ = require('lodash');
 
-path = require('path');
+  fs = require('fs');
 
-chalk = require('chalk');
+  path = require('path');
 
-noon = require('noon');
+  colors = require('colors');
 
-nom = require('nomnom');
+  noon = require('noon');
 
-get = require('./get');
+  get = require('./get');
 
-find = require('./find');
+  find = require('./find');
 
-load = require('./load');
+  load = require('./load');
 
-log = console.log;
+  log = console.log;
 
-args = nom.script('sds').options({
-  file: {
-    position: 0,
-    help: 'the file to search in',
-    list: false,
-    required: false
-  },
-  key: {
-    abbr: 'k',
-    help: 'key to search'
-  },
-  value: {
-    abbr: 'v',
-    help: 'value to search'
-  },
-  path: {
-    abbr: 'p',
-    help: 'path to search'
-  },
-  format: {
-    abbr: 'f',
-    help: 'output format'
-  },
-  object: {
-    abbr: 'o',
-    help: 'output the object',
-    flag: true,
-    hidden: true
-  },
-  result: {
-    abbr: 'r',
-    help: 'output the value',
-    flag: true,
-    hidden: true
-  },
-  json: {
-    abbr: 'j',
-    help: 'parse as json',
-    flag: true
-  },
-  cson: {
-    abbr: 'c',
-    help: 'parse as cson',
-    flag: true
-  },
-  noon: {
-    abbr: 'n',
-    help: 'parse as noon',
-    flag: true
-  },
-  yaml: {
-    abbr: 'y',
-    help: 'parse as yaml',
-    flag: true
-  },
-  colors: {
-    toggle: true,
-    "default": true,
-    help: 'use ansi colors'
-  },
-  version: {
-    abbr: 'V',
-    help: 'output version',
-    flag: true,
-    hidden: true
-  }
-}).help(chalk.blue("Format:\n") + "\   @k key\n\   @v value\n\   @o object\n\   @p path\n\t \n\   default format is \"@p @v\"\n\t\n\   shortcuts: -o for @o\n\              -r for @v and no leading empty line\n\t  ").parse();
+  args = require('karg')("sds\n    file        . ? the file to search in    . * . = package.json\n    key         . ? key to search            \n    value       . ? value to search\n    path        . ? path to search           \n    format      . ? output format            \n    json        . ? parse as json            . = false\n    noon        . ? parse as noon            . = false\n    cson        . - C                        . = false\n    yaml                                     . = false\n    object                                   . = false\n    result                                   . = false\n    colors      . ? output with ansi colors  . = true\n    \nformat\n    @k  key\n    @v  value\n    @o  object\n    @p  path\n    \nshortcuts \n    -o  for @o\n    -r  for @v and no leading empty line\n\nversion     " + (require(__dirname + "/../package.json").version));
 
-err = function(msg) {
-  log(chalk.red("\n" + msg + "\n"));
-  return process.exit();
-};
-
-if (args.version) {
-  cp = require('child_process');
-  log(String(cp.execSync(__dirname + "/../bin/sds " + __dirname + "/../package.json -k version -r")));
-  process.exit();
-}
-
-if (args.file == null) {
-  if (fs.existsSync('./package.json')) {
-    args.file = './package.json';
-  } else {
-    log(nom.getUsage());
-    err('no input file provided!');
-  }
-} else if (!fs.existsSync(args.file)) {
-  log(nom.getUsage());
-  err("can't find file: " + (chalk.yellow.bold(args.file)));
-}
-
-extname = args.json != null ? '.json' : args.cson != null ? '.cson' : args.noon != null ? '.noon' : args.yaml != null ? '.yaml' : path.extname(args.file);
-
-if (extname !== '.json' && extname !== '.cson' && extname !== '.plist' && extname !== '.noon' && extname !== '.yml' && extname !== '.yaml') {
-  err("unknown file type: " + (chalk.yellow.bold(extname)) + ". use --json --cson --noon or --yaml to force parsing.");
-}
-
-data = load(args.file);
-
-if (!((ref = data.constructor.name) === 'Array' || ref === 'Object')) {
-  err("no structure in file: " + (chalk.yellow.bold(args.file)));
-}
-
-if (args.colors) {
-  colors = {
-    key: chalk.gray,
-    path: chalk.bold.gray,
-    "null": chalk.bold.blue,
-    string: chalk.yellow,
-    value: chalk.bold.magenta
+  err = function(msg) {
+    log(("\n" + msg + "\n").red);
+    return process.exit();
   };
-} else {
-  colors = {
-    key: function(s) {
-      return s;
-    },
-    path: function(s) {
-      return s;
-    },
-    value: function(s) {
-      return s;
-    },
-    string: function(s) {
-      return s;
-    },
-    "null": function(s) {
-      return s;
+
+  if (args.file == null) {
+    if (fs.existsSync('./package.json')) {
+      args.file = './package.json';
+    } else {
+      err('no input file provided!');
     }
-  };
-}
+  } else if (!fs.existsSync(args.file)) {
+    err("can't find file: " + args.file.yellow.bold);
+  }
 
-if ((args.key == null) && (args.value == null) && (args.path == null)) {
-  s = noon.stringify(data, {
-    colors: colors
-  });
-  log(s);
-  log('');
-} else {
-  result = (args.path != null) && (args.value != null) ? find.pathValue(data, args.path, args.value) : args.path != null ? find.path(data, args.path) : (args.key != null) && (args.value != null) ? find.keyValue(data, args.key, args.value) : args.key != null ? find.key(data, args.key) : find.value(data, args.value);
-  if (args.object || args.result || args.format) {
+  extname = args.json ? '.json' : args.cson ? '.cson' : args.noon ? '.noon' : args.yaml ? '.yaml' : path.extname(args.file);
+
+  if (extname !== '.json' && extname !== '.cson' && extname !== '.plist' && extname !== '.noon' && extname !== '.yml' && extname !== '.yaml') {
+    err("unknown file type: " + extname.yellow.bold + ". use --json --cson --noon or --yaml to force parsing.");
+  }
+
+  data = load(args.file);
+
+  if (!((ref = data.constructor.name) === 'Array' || ref === 'Object')) {
+    err("no structure in file: " + args.file.yellow.bold);
+  }
+
+  if (args.colors) {
+    colors = {
+      key: colors.gray,
+      path: colors.bold.gray,
+      "null": colors.bold.blue,
+      string: colors.yellow,
+      value: colors.bold.magenta
+    };
+  } else {
+    colors = {
+      key: function(s) {
+        return s;
+      },
+      path: function(s) {
+        return s;
+      },
+      value: function(s) {
+        return s;
+      },
+      string: function(s) {
+        return s;
+      },
+      "null": function(s) {
+        return s;
+      }
+    };
+  }
+
+  if ((args.key == null) && (args.value == null) && (args.path == null)) {
+    s = noon.stringify(data, {
+      colors: colors
+    });
+    log('');
+    log(s);
+    log('');
+  } else {
     if (!args.result) {
       log('');
     }
-    for (i = 0, len = result.length; i < len; i++) {
-      path = result[i];
-      p = path.join('.');
-      k = _.last(path);
-      v = get(data, path);
-      if (args.object) {
-        path.pop();
-        s = noon.stringify(get(data, path), {
-          colors: colors
-        });
-      } else if (args.result) {
-        s = noon.stringify(v, {
-          colors: colors
-        });
-      } else if (args.format) {
-        s = args.format;
-        s = s.replace('@k', colors.key(k));
-        s = s.replace('@p', colors.path(p));
-        s = s.replace('@v', noon.stringify(v, {
-          colors: colors
-        }));
-        if (args.format.indexOf('@o') >= 0) {
+    result = (args.path != null) && (args.value != null) ? find.pathValue(data, args.path, args.value) : args.path != null ? find.path(data, args.path) : (args.key != null) && (args.value != null) ? find.keyValue(data, args.key, args.value) : args.key != null ? find.key(data, args.key) : find.value(data, args.value);
+    if (args.object || args.result || args.format) {
+      for (i = 0, len = result.length; i < len; i++) {
+        path = result[i];
+        p = path.join('.');
+        k = _.last(path);
+        v = get(data, path);
+        if (args.object) {
           path.pop();
-          o = noon.stringify(get(data, path), {
-            colors: true
+          s = noon.stringify(get(data, path), {
+            colors: colors
           });
-          s = s.replace('@o', o);
+        } else if (args.result) {
+          s = noon.stringify(v, {
+            colors: colors
+          });
+        } else if (args.format) {
+          s = args.format;
+          s = s.replace('@k', colors.key(k));
+          s = s.replace('@p', colors.path(p));
+          s = s.replace('@v', noon.stringify(v, {
+            colors: colors
+          }));
+          if (args.format.indexOf('@o') >= 0) {
+            path.pop();
+            o = noon.stringify(get(data, path), {
+              colors: true
+            });
+            s = s.replace('@o', o);
+          }
+        } else {
+          o = {};
+          o[p] = v;
+          s = noon.stringify(o, {
+            colors: colors
+          });
         }
-      } else {
-        o = {};
-        o[p] = v;
-        s = noon.stringify(o, {
-          colors: colors
-        });
+        log(s);
       }
+    } else {
+      o = {};
+      for (j = 0, len1 = result.length; j < len1; j++) {
+        path = result[j];
+        o[path.join('.')] = get(data, path);
+      }
+      s = noon.stringify(o, {
+        colors: colors
+      });
       log(s);
     }
-  } else {
-    o = {};
-    for (j = 0, len1 = result.length; j < len1; j++) {
-      path = result[j];
-      o[path.join('.')] = get(data, path);
+    if (!args.result) {
+      log('');
     }
-    s = noon.stringify(o, {
-      colors: colors
-    });
-    log(s);
   }
-  if (!args.result) {
-    log('');
-  }
-}
+
+}).call(this);
