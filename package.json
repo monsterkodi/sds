@@ -37,7 +37,7 @@
     "js-yaml": "^3.5.2",
     "lodash": "^4.0.0",
     "simple-plist": "git://github.com/monsterkodi/node-simple-plist.git",
-    "karg": ">=0.1.19",
+    "karg": ">=0.1.20",
     "noon": ">=0.7.3"
   },
   "devDependencies": {
