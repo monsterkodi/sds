@@ -1,0 +1,1 @@
+test  . coffee/diff.coffee . test/test.coffee

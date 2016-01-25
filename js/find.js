@@ -17,16 +17,6 @@
   find = (function() {
     function find() {}
 
-    find.value = function(node, val) {
-      var valReg;
-      valReg = this.reg(val);
-      return this.traverse(node, (function(_this) {
-        return function(p, k, v) {
-          return _this.match(v, valReg);
-        };
-      })(this));
-    };
-
     find.key = function(node, key) {
       var keyReg;
       keyReg = this.reg(key);
@@ -47,13 +37,12 @@
       })(this));
     };
 
-    find.pathValue = function(node, path, val) {
-      var pthReg, valReg;
-      pthReg = this.reg(path);
+    find.value = function(node, val) {
+      var valReg;
       valReg = this.reg(val);
       return this.traverse(node, (function(_this) {
         return function(p, k, v) {
-          return _this.matchPath(p, pthReg) && _this.match(v, valReg);
+          return _this.match(v, valReg);
         };
       })(this));
     };
@@ -65,6 +54,17 @@
       return this.traverse(node, (function(_this) {
         return function(p, k, v) {
           return _this.match(k, keyReg) && _this.match(v, valReg);
+        };
+      })(this));
+    };
+
+    find.pathValue = function(node, path, val) {
+      var pthReg, valReg;
+      pthReg = this.reg(path);
+      valReg = this.reg(val);
+      return this.traverse(node, (function(_this) {
+        return function(p, k, v) {
+          return _this.matchPath(p, pthReg) && _this.match(v, valReg);
         };
       })(this));
     };

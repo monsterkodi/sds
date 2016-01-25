@@ -13,5 +13,6 @@ module.exports =
     load:      require './load'
     save:      require './save'
     find:      require './find'
+    diff:      require './diff'
     get:       require './get'
     regexp:    require './regexp'

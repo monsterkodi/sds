@@ -35,10 +35,10 @@
     "colors": "^1.1.2",
     "cson": "^3.0.2",
     "js-yaml": "^3.5.2",
-    "lodash": "^4.0.0",
+    "lodash": "^4.0.1",
     "simple-plist": "git://github.com/monsterkodi/node-simple-plist.git",
-    "karg": ">=0.1.20",
-    "noon": ">=0.7.3"
+    "karg": ">=0.2.1",
+    "noon": ">=0.8.3"
   },
   "devDependencies": {
     "chai": "^3.4.1",

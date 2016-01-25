@@ -11,28 +11,28 @@ regexp = require './regexp'
 
 class find
 
-    @value: (node, val) -> 
-        valReg = @reg val         
-        @traverse node, (p,k,v) => @match v, valReg
-        
     @key: (node, key) -> 
         keyReg = @reg key 
         @traverse node, (p,k,v) => @match k, keyReg
-        
+
     @path: (node, path) -> 
         pthReg = @reg path
         @traverse node, (p,k,v) => @matchPath(p, pthReg)
-        
-    @pathValue:(node, path, val) -> 
-        pthReg = @reg path
+
+    @value: (node, val) -> 
         valReg = @reg val         
-        @traverse node, (p,k,v) => @matchPath(p, pthReg) and @match(v, valReg)
+        @traverse node, (p,k,v) => @match v, valReg
         
     @keyValue: (node, key, val) -> 
         keyReg = @reg key 
         valReg = @reg val 
         @traverse node, (p,k,v) => @match(k, keyReg) and @match(v, valReg)
-
+                        
+    @pathValue:(node, path, val) -> 
+        pthReg = @reg path
+        valReg = @reg val         
+        @traverse node, (p,k,v) => @matchPath(p, pthReg) and @match(v, valReg)
+        
     ###
     00     00   0000000   000000000   0000000  000   000
     000   000  000   000     000     000       000   000
