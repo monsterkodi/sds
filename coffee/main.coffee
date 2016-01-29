@@ -6,13 +6,15 @@
 000   000  000   000  000  000   000
 ###
 
+noon = require 'noon'
+
 module.exports = 
-    extnames:   ['.json', '.cson', '.noon', '.plist', '.yml', '.yaml']
-    extensions: [ 'json',  'cson',  'noon',  'plist',  'yml',  'yaml']
-    stringify: require './stringify'
-    load:      require './load'
-    save:      require './save'
-    find:      require './find'
-    diff:      require './diff'
-    get:       require './get'
-    regexp:    require './regexp'
+    extnames:   noon.extnames
+    extensions: noon.extensions
+    stringify:  noon.stringify
+    load:       noon.load
+    save:       noon.save
+    find:       require './find'
+    diff:       require './diff'
+    get:        require './get'
+    regexp:     require './regexp'

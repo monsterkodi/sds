@@ -8,7 +8,7 @@
  */
 
 (function() {
-  var _, args, colors, data, err, extname, find, fs, get, i, j, k, len, len1, load, log, noon, o, p, path, ref, result, s, v;
+  var _, args, colors, data, err, extname, find, fs, get, i, j, k, len, len1, log, noon, o, p, path, ref, result, s, v;
 
   _ = require('lodash');
 
@@ -23,8 +23,6 @@
   get = require('./get');
 
   find = require('./find');
-
-  load = require('./load');
 
   log = console.log;
 
@@ -51,7 +49,7 @@
     err("unknown file type: " + extname.yellow.bold + ". use --json --cson --noon or --yaml to force parsing.");
   }
 
-  data = load(args.file);
+  data = noon.load(args.file);
 
   if (!((ref = data.constructor.name) === 'Array' || ref === 'Object')) {
     err("no structure in file: " + args.file.yellow.bold);
@@ -97,6 +95,7 @@
       log('');
     }
     result = (args.path != null) && (args.value != null) ? find.pathValue(data, args.path, args.value) : args.path != null ? find.path(data, args.path) : (args.key != null) && (args.value != null) ? find.keyValue(data, args.key, args.value) : args.key != null ? find.key(data, args.key) : find.value(data, args.value);
+    log(result, data);
     if (args.object || args.result || args.format) {
       for (i = 0, len = result.length; i < len; i++) {
         path = result[i];

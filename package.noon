@@ -1,5 +1,5 @@
 name            sds
-version         1.4.23
+version         1.5.0
 description     structured data search
 main            ./js/main.js
 author          monsterkodi
@@ -27,13 +27,10 @@ keywords
 scripts
                 test  mocha -R dot --compilers coffee:coffee-script/register
 dependencies
-                colors        ^1.1.2
-                cson          ^3.0.2
-                js-yaml       ^3.5.2
-                lodash        ^4.0.1
-                simple-plist  git://github.com/monsterkodi/node-simple-plist.git
-                karg          >=0.2.1
-                noon          >=0.8.3
+                colors  ^1.1.2
+                lodash  ^4.0.1
+                karg    >=0.3.1
+                noon    >=0.9.9
 devDependencies
-                chai    ^3.4.1
-                mocha   ^2.3.4
+                chai    ^3.5.0
+                mocha   ^2.4.5

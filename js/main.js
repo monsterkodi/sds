@@ -8,12 +8,16 @@
  */
 
 (function() {
+  var noon;
+
+  noon = require('noon');
+
   module.exports = {
-    extnames: ['.json', '.cson', '.noon', '.plist', '.yml', '.yaml'],
-    extensions: ['json', 'cson', 'noon', 'plist', 'yml', 'yaml'],
-    stringify: require('./stringify'),
-    load: require('./load'),
-    save: require('./save'),
+    extnames: noon.extnames,
+    extensions: noon.extensions,
+    stringify: noon.stringify,
+    load: noon.load,
+    save: noon.save,
     find: require('./find'),
     diff: require('./diff'),
     get: require('./get'),

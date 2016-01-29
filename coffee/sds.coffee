@@ -13,7 +13,6 @@ colors = require 'colors'
 noon   = require 'noon'
 get    = require './get'
 find   = require './find'
-load   = require './load'
 log    = console.log
 
 args = require('karg') """
@@ -67,7 +66,7 @@ extname =
 if extname not in ['.json', '.cson', '.plist', '.noon', '.yml', '.yaml']
     err "unknown file type: #{extname.yellow.bold}. use --json --cson --noon or --yaml to force parsing."
 
-data = load args.file
+data = noon.load args.file
 
 if not (data.constructor.name in ['Array', 'Object'])
     err "no structure in file: #{args.file.yellow.bold}"
@@ -107,6 +106,8 @@ else
             find.key data, args.key
         else
             find.value data, args.value
+            
+    log result, data
         
     if args.object or args.result or args.format
         for path in result
