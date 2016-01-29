@@ -106,9 +106,7 @@ else
             find.key data, args.key
         else
             find.value data, args.value
-            
-    log result, data
-        
+                    
     if args.object or args.result or args.format
         for path in result
             p = path.join '.'

@@ -95,7 +95,6 @@
       log('');
     }
     result = (args.path != null) && (args.value != null) ? find.pathValue(data, args.path, args.value) : args.path != null ? find.path(data, args.path) : (args.key != null) && (args.value != null) ? find.keyValue(data, args.key, args.value) : args.key != null ? find.key(data, args.key) : find.value(data, args.value);
-    log(result, data);
     if (args.object || args.result || args.format) {
       for (i = 0, len = result.length; i < len; i++) {
         path = result[i];
