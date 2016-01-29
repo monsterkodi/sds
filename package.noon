@@ -1,5 +1,5 @@
 name            sds
-version         1.5.2
+version         1.5.3
 description     structured data search
 main            ./js/main.js
 author          monsterkodi
@@ -28,9 +28,9 @@ scripts
                 test  mocha -R dot --compilers coffee:coffee-script/register
 dependencies
                 colors  ^1.1.2
-                lodash  ^4.0.1
+                lodash  ^4.1.0
                 karg    >=0.3.1
-                noon    >=0.9.9
+                noon    >=0.9.11
 devDependencies
                 chai    ^3.5.0
                 mocha   ^2.4.5
