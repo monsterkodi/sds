@@ -1,6 +1,6 @@
 {
   "name": "sds",
-  "version": "1.5.4",
+  "version": "1.5.5",
   "description": "structured data search",
   "main": "./js/main.js",
   "author": "monsterkodi",
