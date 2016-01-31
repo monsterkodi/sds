@@ -26,6 +26,15 @@
 
   log = console.log;
 
+
+  /*
+   0000000   00000000    0000000    0000000
+  000   000  000   000  000        000     
+  000000000  0000000    000  0000  0000000 
+  000   000  000   000  000   000       000
+  000   000  000   000   0000000   0000000
+   */
+
   args = require('karg')("sds\n    file        . ? the file to search in    . * . = package.json\n    key         . ? key to search            \n    value       . ? value to search\n    path        . ? path to search           \n    format      . ? output format            \n    json        . ? parse as json            . = false\n    noon        . ? parse as noon            . = false\n    cson        . - C                        . = false\n    yaml                                     . = false\n    object                                   . = false\n    result                                   . = false\n    colors      . ? output with ansi colors  . = true\n    \nformat\n    @k  key\n    @v  value\n    @o  object\n    @p  path\n    \nshortcuts \n    -o  for @o\n    -r  for @v and no leading empty line\n\nversion     " + (require(__dirname + "/../package.json").version));
 
   err = function(msg) {
@@ -55,13 +64,31 @@
     err("no structure in file: " + args.file.yellow.bold);
   }
 
+
+  /*
+   0000000   0000000   000       0000000   00000000    0000000
+  000       000   000  000      000   000  000   000  000     
+  000       000   000  000      000   000  0000000    0000000 
+  000       000   000  000      000   000  000   000       000
+   0000000   0000000   0000000   0000000   000   000  0000000
+   */
+
   if (args.colors) {
     colors = {
       key: colors.gray,
-      path: colors.bold.gray,
       "null": colors.bold.blue,
-      string: colors.yellow,
-      value: colors.bold.magenta
+      string: colors.yellow.bold,
+      value: colors.bold.white,
+      url: colors.yellow,
+      "true": colors.blue.bold,
+      "false": colors.gray.dim,
+      path: colors.green,
+      value: colors.white,
+      semver: colors.red,
+      number: colors.magenta,
+      visited: colors.red,
+      dim: '\\^\\>\\=\\.\\:\\/\\-',
+      fat: '*'
     };
   } else {
     colors = {
@@ -84,6 +111,14 @@
   }
 
   if ((args.key == null) && (args.value == null) && (args.path == null)) {
+
+    /*
+    000      000   0000000  000000000
+    000      000  000          000   
+    000      000  0000000      000   
+    000      000       000     000   
+    0000000  000  0000000      000
+     */
     s = noon.stringify(data, {
       colors: colors
     });
@@ -91,6 +126,14 @@
     log(s);
     log('');
   } else {
+
+    /*
+     0000000  00000000   0000000   00000000    0000000  000   000
+    000       000       000   000  000   000  000       000   000
+    0000000   0000000   000000000  0000000    000       000000000
+         000  000       000   000  000   000  000       000   000
+    0000000   00000000  000   000  000   000   0000000  000   000
+     */
     if (!args.result) {
       log('');
     }

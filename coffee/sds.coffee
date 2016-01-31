@@ -15,6 +15,14 @@ get    = require './get'
 find   = require './find'
 log    = console.log
 
+###
+ 0000000   00000000    0000000    0000000
+000   000  000   000  000        000     
+000000000  0000000    000  0000  0000000 
+000   000  000   000  000   000       000
+000   000  000   000   0000000   0000000 
+###
+
 args = require('karg') """
 sds
     file        . ? the file to search in    . * . = package.json
@@ -70,14 +78,31 @@ data = noon.load args.file
 
 if not (data.constructor.name in ['Array', 'Object'])
     err "no structure in file: #{args.file.yellow.bold}"
+
+###
+ 0000000   0000000   000       0000000   00000000    0000000
+000       000   000  000      000   000  000   000  000     
+000       000   000  000      000   000  0000000    0000000 
+000       000   000  000      000   000  000   000       000
+ 0000000   0000000   0000000   0000000   000   000  0000000 
+###
     
 if args.colors
     colors = 
         key:     colors.gray
-        path:    colors.bold.gray
         null:    colors.bold.blue
-        string:  colors.yellow
-        value:   colors.bold.magenta
+        string:  colors.yellow.bold
+        value:   colors.bold.white
+        url:     colors.yellow
+        true:    colors.blue.bold
+        false:   colors.gray.dim
+        path:    colors.green
+        value:   colors.white
+        semver:  colors.red
+        number:  colors.magenta
+        visited: colors.red
+        dim:     '\\^\\>\\=\\.\\:\\/\\-'
+        fat:     '*'        
 else
     colors = 
         key:     (s)->s
@@ -85,13 +110,33 @@ else
         value:   (s)->s
         string:  (s)->s
         null:    (s)->s
+
     
 if not args.key? and not args.value? and not args.path?
+
+    ###
+    000      000   0000000  000000000
+    000      000  000          000   
+    000      000  0000000      000   
+    000      000       000     000   
+    0000000  000  0000000      000   
+    ###
+    
     s = noon.stringify data, colors: colors
     log ''
     log s
     log ''
-else        
+    
+else      
+    
+    ###
+     0000000  00000000   0000000   00000000    0000000  000   000
+    000       000       000   000  000   000  000       000   000
+    0000000   0000000   000000000  0000000    000       000000000
+         000  000       000   000  000   000  000       000   000
+    0000000   00000000  000   000  000   000   0000000  000   000
+    ###
+      
     if not args.result
         log ''
         
