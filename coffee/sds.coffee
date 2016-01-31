@@ -101,8 +101,6 @@ if args.colors
         semver:  colors.red
         number:  colors.magenta
         visited: colors.red
-        dim:     '\\^\\>\\=\\.\\:\\/\\-'
-        fat:     '*'        
 else
     colors = 
         key:     (s)->s

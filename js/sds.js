@@ -86,9 +86,7 @@
       value: colors.white,
       semver: colors.red,
       number: colors.magenta,
-      visited: colors.red,
-      dim: '\\^\\>\\=\\.\\:\\/\\-',
-      fat: '*'
+      visited: colors.red
     };
   } else {
     colors = {
