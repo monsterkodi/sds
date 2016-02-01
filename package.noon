@@ -1,5 +1,5 @@
 name            sds
-version         1.5.6
+version         1.5.7
 description     structured data search
 main            ./js/main.js
 author          monsterkodi
@@ -34,3 +34,4 @@ dependencies
 devDependencies
                 chai    ^3.5.0
                 mocha   ^2.4.5
+                noon    ^0.9.17
