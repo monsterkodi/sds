@@ -105,12 +105,12 @@ describe 'diff', ->
     d2cb = 
         diff:   [   [ [ 'p' ], [ 1, 3 ], [ 1, 3, 2 ] ],
                     [ [ 'p', 2 ], undefined, 2 ] ]
-        new:    [   [ [ 't' ], { x: 'a', y: 2 } ],
-                    [ [ 'u' ], { x: 1 } ],
-                    [ [ 'y' ], 9 ] ]
         same:   [   [ [ 'q' ], { x: 1, y: 2 } ],
                     [ [ 's' ], 'sss' ],
                     [ [ 'x' ], 8 ] ]
+        new:    [   [ [ 't' ], { x: 'a', y: 2 } ],
+                    [ [ 'u' ], { x: 1 } ],
+                    [ [ 'y' ], 9 ] ]
         del:    [   [ [ 'r' ], 1 ], 
                     [ [ 'v' ], 0 ], 
                     [ [ 'z' ], 7 ] ]
@@ -124,19 +124,16 @@ describe 'diff', ->
         .to.eql d2cb
                         
     # it 'should diff three', -> 
-    #     
+    # 
     #     expect sds.diff.three c, a, b
     #     .to.eql 
-    #         a:  
-    #             new:     [ 'o', 'y' ]
-    #             diff:    [ 'p', 'r', 's', 't', 'u' ]
-    #             same:    [ 'q', 'x', 'z' ]
-    #             del:     [ 'v' ]
-    #         b:  
-    #             new:     [ 'y' ]
-    #             diff:    [ 'p',      's', 't', 'u' ]
-    #             same:    [ 'q', 'x' ]
-    #             del:     [ 'z', 'r' ]
+    #         c2a:    d2ca
+    #         c2b:    d2cb
+    #         merge:
+    #             diff: []
+    #             same: []
+    #             new:  []
+    #             del:  []
             
 ###
  0000000  000000000  00000000   000  000   000   0000000   000  00000000  000   000

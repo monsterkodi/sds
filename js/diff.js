@@ -58,35 +58,13 @@
       };
     };
 
-    diff.three = function(a, b, c) {
-      var comp, da, db;
+    diff.three = function(c, a, b) {
+      var da, db;
       da = this.two(c, a);
       db = this.two(c, b);
-      log('ta'.red, ta);
-      log('tb'.green, tb);
-      log('tc'.magenta, tc);
-      comp = function(x, y) {
-        return x[0][0] === y[0][0];
-      };
-      log("diff a b".red, _.differenceWith(ta, tb, comp));
-      log("diff a c".red, _.differenceWith(ta, tc, comp));
-      log("diff b c".red, _.differenceWith(tb, tc, comp));
-      log("diff a b c".yellow, _.differenceWith(ta, tb, tc, comp));
-      log("union a b".red, _.unionWith(ta, tb, comp));
-      log("union a c".red, _.unionWith(ta, tc, comp));
-      log("union b c".red, _.unionWith(tb, tc, comp));
-      log("union a b c".yellow, _.unionWith(ta, tb, tc, comp));
       return {
-        a: {
-          "new": ['o', 't', 'u'],
-          changed: ['p', 'r', 's'],
-          del: ['v']
-        },
-        b: {
-          "new": ['t', 'u'],
-          changed: ['p', 'r', 's'],
-          del: ['v', 'z']
-        }
+        c2a: da,
+        c2b: db
       };
     };
 

@@ -36,36 +36,13 @@ class diff
         same: uac.filter (t) ->  t[0].length == 1
         del:  dca.filter (t) ->  t[0].length == 1
                 
-    @three: (a, b, c) -> 
+    @three: (c, a, b) -> 
         
         da = @two c, a
         db = @two c, b
         
-        log 'ta'.red, ta
-        log 'tb'.green, tb
-        log 'tc'.magenta, tc
-        
-        comp = (x,y) -> x[0][0] == y[0][0]
-            # log x, y 
-        log "diff a b".red, _.differenceWith ta, tb, comp
-        log "diff a c".red, _.differenceWith ta, tc, comp
-        log "diff b c".red, _.differenceWith tb, tc, comp
-        log "diff a b c".yellow, _.differenceWith ta, tb, tc, comp
-        
-        log "union a b".red, _.unionWith ta, tb, comp
-        log "union a c".red, _.unionWith ta, tc, comp
-        log "union b c".red, _.unionWith tb, tc, comp
-        log "union a b c".yellow, _.unionWith ta, tb, tc, comp
-        
-        
-        a:  
-            new:     [ 'o', 't', 'u' ]
-            changed: [ 'p', 'r', 's' ]
-            del:     [ 'v' ]
-        b:  
-            new:     [ 't', 'u' ]
-            changed: [ 'p', 'r', 's' ]
-            del:     [ 'v', 'z' ]
+        c2a: da
+        c2b: db
 
     ###
     000000000  00000000    0000000   000   000  00000000  00000000    0000000  00000000
