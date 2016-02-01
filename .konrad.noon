@@ -1,1 +1,3 @@
-test  . coffee/diff.coffee . test/test.coffee
+test    . coffee/diff.coffee . test/test.coffee
+ignore  . test/.*\.coffee$
+

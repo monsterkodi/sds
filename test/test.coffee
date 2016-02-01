@@ -39,9 +39,11 @@ describe 'find', ->
 000   000  000  000       000     
 0000000    000  000       000     
 ###
+
 describe 'diff', ->
     
-    it 'should implement three',         -> _.isFunction(sds.diff.three       ).should.be.true    
+    it 'should implement diff.two'  , -> _.isFunction(sds.diff.two  ).should.be.true
+    it 'should implement diff.three', -> _.isFunction(sds.diff.three).should.be.true
 
     c = 
         p:  [1,3]
@@ -84,19 +86,57 @@ describe 'diff', ->
             x: 1
         y:  9
         x:  8
-            
-    it 'should output the difference', -> 
-        expect sds.diff.three a, b, c
-        .to.eql 
-            a:  
-                new:     [ 'o', 't', 'u' ]
-                changed: [ 'p', 'r', 's' ]
-                del:     [ 'v' ]
-            b:  
-                new:     [ 't', 'u' ]
-                changed: [ 'p', 'r', 's' ]
-                del:     [ 'v', 'z' ]
         
+    d2ca =
+        diff:   [   [ [ 'p' ], [1, 3], [ 1, 2, 3 ] ],
+                    [ [ 'p', 1 ], 3, 2 ],
+                    [ [ 'p', 2 ], undefined, 3 ],
+                    [ [ 'r' ], 1, null ],
+                    [ [ 's' ], 'sss', 's!s' ] ]
+        same:   [   [ [ 'q' ], { x: 1, y: 2 } ], 
+                    [ [ 'x' ], 8 ], 
+                    [ [ 'z' ], 7 ] ]
+        new:    [   [ [ 'o' ], 1 ]
+                    [ [ 't' ], { x: 1, z: 3 } ]
+                    [ [ 'u' ], { x: 4 } ]
+                    [ [ 'y' ], 9 ] ]
+        del:    [   [ [ 'v' ], 0 ] ]
+
+    d2cb = 
+        diff:   [   [ [ 'p' ], [ 1, 3 ], [ 1, 3, 2 ] ],
+                    [ [ 'p', 2 ], undefined, 2 ] ]
+        new:    [   [ [ 't' ], { x: 'a', y: 2 } ],
+                    [ [ 'u' ], { x: 1 } ],
+                    [ [ 'y' ], 9 ] ]
+        same:   [   [ [ 'q' ], { x: 1, y: 2 } ],
+                    [ [ 's' ], 'sss' ],
+                    [ [ 'x' ], 8 ] ]
+        del:    [   [ [ 'r' ], 1 ], 
+                    [ [ 'v' ], 0 ], 
+                    [ [ 'z' ], 7 ] ]
+            
+    it 'should diff two', -> 
+        
+        expect sds.diff.two c, a
+        .to.eql d2ca
+    
+        expect sds.diff.two c, b
+        .to.eql d2cb
+                        
+    # it 'should diff three', -> 
+    #     
+    #     expect sds.diff.three c, a, b
+    #     .to.eql 
+    #         a:  
+    #             new:     [ 'o', 'y' ]
+    #             diff:    [ 'p', 'r', 's', 't', 'u' ]
+    #             same:    [ 'q', 'x', 'z' ]
+    #             del:     [ 'v' ]
+    #         b:  
+    #             new:     [ 'y' ]
+    #             diff:    [ 'p',      's', 't', 'u' ]
+    #             same:    [ 'q', 'x' ]
+    #             del:     [ 'z', 'r' ]
             
 ###
  0000000  000000000  00000000   000  000   000   0000000   000  00000000  000   000
