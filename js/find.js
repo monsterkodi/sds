@@ -19,52 +19,64 @@
   find = (function() {
     function find() {}
 
-    find.key = function(node, key) {
+
+    /*
+     * accept an object and a (key, path or value)
+     * return a list of keypaths for matching (key, path or value)
+     */
+
+    find.key = function(object, key) {
       var keyReg;
       keyReg = this.reg(key);
-      return this.traverse(node, (function(_this) {
+      return this.traverse(object, (function(_this) {
         return function(p, k, v) {
           return _this.match(k, keyReg);
         };
       })(this));
     };
 
-    find.path = function(node, path) {
+    find.path = function(object, path) {
       var pthReg;
       pthReg = this.reg(path);
-      return this.traverse(node, (function(_this) {
+      return this.traverse(object, (function(_this) {
         return function(p, k, v) {
           return _this.matchPath(p, pthReg);
         };
       })(this));
     };
 
-    find.value = function(node, val) {
+    find.value = function(object, val) {
       var valReg;
       valReg = this.reg(val);
-      return this.traverse(node, (function(_this) {
+      return this.traverse(object, (function(_this) {
         return function(p, k, v) {
           return _this.match(v, valReg);
         };
       })(this));
     };
 
-    find.keyValue = function(node, key, val) {
+
+    /*
+     * accept an object, a (key or path) and a value
+     * return a list of keypaths for matching (key or path) and value combinations
+     */
+
+    find.keyValue = function(object, key, val) {
       var keyReg, valReg;
       keyReg = this.reg(key);
       valReg = this.reg(val);
-      return this.traverse(node, (function(_this) {
+      return this.traverse(object, (function(_this) {
         return function(p, k, v) {
           return _this.match(k, keyReg) && _this.match(v, valReg);
         };
       })(this));
     };
 
-    find.pathValue = function(node, path, val) {
+    find.pathValue = function(object, path, val) {
       var pthReg, valReg;
       pthReg = this.reg(path);
       valReg = this.reg(val);
-      return this.traverse(node, (function(_this) {
+      return this.traverse(object, (function(_this) {
         return function(p, k, v) {
           return _this.matchPath(p, pthReg) && _this.match(v, valReg);
         };
@@ -115,8 +127,8 @@
        000     000   000  000   000      0      00000000  000   000  0000000   00000000
      */
 
-    find.traverse = function(node, func) {
-      return collect(node, func, function(p, v) {
+    find.traverse = function(object, func) {
+      return collect(object, func, function(p, v) {
         return p;
       });
     };

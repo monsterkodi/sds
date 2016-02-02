@@ -5,8 +5,10 @@
 000       000   000  000      000      000       000          000   
  0000000   0000000   0000000  0000000  00000000   0000000     000   
 ###
+_ = require 'lodash'
+###
 #
-# accepts an object node
+# accepts an object
 #         a filter (keypath, key, value) -> true        # false to exclude
 #         a map    (keypath, value) -> [keypath, value] # maps results
 #         
@@ -18,19 +20,18 @@
 #         ]
 #
 # with keypath: a list of strings and integers
-#      value:   same as get(node, keypath)
+#      value:   same as get(object, keypath)
+###
 
-_ = require 'lodash'
-
-collect = (node, filter, map, count=-1, keyPath=[], result=[]) ->
+collect = (object, filter, map, count=-1, keyPath=[], result=[]) ->
 
     filter ?= (p,k,v) -> true
     map    ?= (p,v) -> [p,v]
 
-    switch node.constructor.name
+    switch object.constructor.name
         when "Array"
-            for i in [0...node.length]
-                v = node[i]
+            for i in [0...object.length]
+                v = object[i]
                 keyPath.push i
                 if filter keyPath, i,v
                     result.push map _.clone(keyPath), v
@@ -39,7 +40,7 @@ collect = (node, filter, map, count=-1, keyPath=[], result=[]) ->
                     collect v, filter, map, count, keyPath, result
                 keyPath.pop()
         when "Object"
-            for k,v of node
+            for k,v of object
                 keyPath.push k
                 if filter keyPath, k,v
                     result.push map _.clone(keyPath), v

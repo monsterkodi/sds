@@ -5,34 +5,43 @@
 000       000  000  0000  000   000
 000       000  000   000  0000000  
 ###
-
 _       = require 'lodash'
 regexp  = require './regexp'
 collect = require './collect'
 
 class find
 
-    @key: (node, key) -> 
+    ###
+    # accept an object and a (key, path or value)
+    # return a list of keypaths for matching (key, path or value)
+    ###
+
+    @key: (object, key) -> 
         keyReg = @reg key 
-        @traverse node, (p,k,v) => @match k, keyReg
+        @traverse object, (p,k,v) => @match k, keyReg
 
-    @path: (node, path) -> 
+    @path: (object, path) -> 
         pthReg = @reg path
-        @traverse node, (p,k,v) => @matchPath(p, pthReg)
+        @traverse object, (p,k,v) => @matchPath(p, pthReg)
 
-    @value: (node, val) -> 
+    @value: (object, val) -> 
         valReg = @reg val         
-        @traverse node, (p,k,v) => @match v, valReg
+        @traverse object, (p,k,v) => @match v, valReg
+
+    ###
+    # accept an object, a (key or path) and a value
+    # return a list of keypaths for matching (key or path) and value combinations
+    ###
         
-    @keyValue: (node, key, val) -> 
+    @keyValue: (object, key, val) -> 
         keyReg = @reg key 
         valReg = @reg val 
-        @traverse node, (p,k,v) => @match(k, keyReg) and @match(v, valReg)
+        @traverse object, (p,k,v) => @match(k, keyReg) and @match(v, valReg)
                         
-    @pathValue:(node, path, val) -> 
+    @pathValue:(object, path, val) -> 
         pthReg = @reg path
         valReg = @reg val         
-        @traverse node, (p,k,v) => @matchPath(p, pthReg) and @match(v, valReg)
+        @traverse object, (p,k,v) => @matchPath(p, pthReg) and @match(v, valReg)
         
     ###
     00     00   0000000   000000000   0000000  000   000
@@ -68,6 +77,6 @@ class find
        000     000   000  000   000      0      00000000  000   000  0000000   00000000
     ###
     
-    @traverse: (node, func) -> collect node, func, (p,v) -> p
+    @traverse: (object, func) -> collect object, func, (p,v) -> p
         
 module.exports = find

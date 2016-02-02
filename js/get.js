@@ -12,19 +12,25 @@
 
   _ = require('lodash');
 
-  get = function(node, keyPath) {
+
+  /*
+   * accepts an object and a keypath
+   * returns the value at keypath or undefined
+   */
+
+  get = function(object, keypath) {
     var kp;
-    kp = _.clone(keyPath);
+    kp = _.clone(keypath);
     while (kp.length) {
-      node = node[kp.shift()];
-      if (node === null) {
+      object = object[kp.shift()];
+      if (object === null) {
         return null;
       }
-      if (node == null) {
+      if (object == null) {
         return void 0;
       }
     }
-    return node;
+    return object;
   };
 
   module.exports = get;

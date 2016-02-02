@@ -12,7 +12,25 @@
 
   _ = require('lodash');
 
-  collect = function(node, filter, map, count, keyPath, result) {
+
+  /*
+   *
+   * accepts an object
+   *         a filter (keypath, key, value) -> true        # false to exclude
+   *         a map    (keypath, value) -> [keypath, value] # maps results
+   *         
+   * returns a list of lists
+   *
+   *         [
+   *            [ keypath, value ]
+   *              ...
+   *         ]
+   *
+   * with keypath: a list of strings and integers
+   *      value:   same as get(object, keypath)
+   */
+
+  collect = function(object, filter, map, count, keyPath, result) {
     var i, j, k, ref, ref1, ref2, v;
     if (count == null) {
       count = -1;
@@ -33,10 +51,10 @@
         return [p, v];
       };
     }
-    switch (node.constructor.name) {
+    switch (object.constructor.name) {
       case "Array":
-        for (i = j = 0, ref = node.length; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
-          v = node[i];
+        for (i = j = 0, ref = object.length; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
+          v = object[i];
           keyPath.push(i);
           if (filter(keyPath, i, v)) {
             result.push(map(_.clone(keyPath), v));
@@ -51,8 +69,8 @@
         }
         break;
       case "Object":
-        for (k in node) {
-          v = node[k];
+        for (k in object) {
+          v = object[k];
           keyPath.push(k);
           if (filter(keyPath, k, v)) {
             result.push(map(_.clone(keyPath), v));

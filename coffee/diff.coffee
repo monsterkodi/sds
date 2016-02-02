@@ -67,15 +67,11 @@ class diff
     # accepts three objects c, a and b
     # returns an object
     #
-    #   diff: [ list of [keypath, value_a, value_b] for conflicting values in a and b   ]
-    #   del:  [ list of [keypath, value_c]          for unproblematic deleted in a and or b ]
-    #   same: [ list of [keypath, value]            for unproblematic values in a and b ]
+    #   diff: [ list of [keypath, value_a, value_b] for conflicting values in a and b                 ]
+    #   del:  [ list of [keypath, value_c]          for deleted in (a or b) and unchanged in (b or a) ]
+    #   same: [ list of [keypath, value]            for same in a and b or only new in (a or b)       ]
     #
-    #   unproblematic:
-    #         values: same in a and b or only new in a or only new in b
-    #         deleted: deleted in both a and b or deleted in one and unchanged between c and the other
-    #
-    #   some intermediate results are included as well...
+    #   some intermediate results are included:
     # 
     #   c2a:  changes between c and a
     #   c2b:  changes between c and b
@@ -91,30 +87,30 @@ class diff
         ba = @two b, a
         
         keq = (x,y) -> x[0][0] == y[0][0]
-        ssm = _.intersectionWith ca.same, cb.same, _.isEqual # same in same
-        snw = _.unionWith ca.new, cb.new, _.isEqual          # new ...
-        snw = snw.filter (t) ->                              #     and
-            f = 0                                            #     ...
-            for t2 in snw                                    #     not
-                f += 1 if t2[0][0] == t[0][0]                #     ...
-            f == 1                                           #     different
-        sdf = _.intersectionWith ca.diff, cb.diff, _.isEqual # same in diff
-        cha = _.intersectionWith cb.same, ca.diff, keq       # changed in a
-        chb = _.intersectionWith ca.same, cb.diff, keq       # changed in b
+        ssm = _.intersectionWith ca.same, cb.same, _.isEqual              # same in same
+        snw = _.unionWith ca.new, cb.new, _.isEqual                       # new ...
+        snw = snw.filter (t) ->                                           #     and
+            f = 0                                                         #     ...
+            for t2 in snw                                                 #     not
+                f += 1 if t2[0][0] == t[0][0]                             #     ...
+            f == 1                                                        #     different
+        sdf = _.intersectionWith ca.diff, cb.diff, _.isEqual              # same in diff
+        cha = _.intersectionWith cb.same, ca.diff, keq                    # changed in a
+        chb = _.intersectionWith ca.same, cb.diff, keq                    # changed in b
         cha = _.uniqWith (cha.map (t) -> [t[0], get(a, t[0])]), _.isEqual
         chb = _.uniqWith (chb.map (t) -> [t[0], get(b, t[0])]), _.isEqual
         sdf = sdf.map (t) -> [t[0], t[2]]
         sme = _.unionWith ssm, snw, sdf, cha, chb, _.isEqual # union of sames or changed on one side only
 
-        dff = _.unionWith ca.diff, cb.diff, ca.new, cb.new,     _.isEqual # diff = union of diff and new
-        dff = _.differenceWith dff, sme, keq                 #        minus union of sames
+        dff = _.unionWith ca.diff, cb.diff, ca.new, cb.new, _.isEqual     # diff = union of diff and new
+        dff = _.differenceWith dff, sme, keq                              #        minus union of sames
         dff = toplevel dff
         dff = dff.map (t) -> [t[0], get(a, t[0]), get(b, t[0])]
         dff = _.uniqWith dff, _.isEqual
 
-        dla = _.intersectionWith ca.del, cb.same, _.isEqual
-        dlb = _.intersectionWith cb.del, ca.same, _.isEqual
-        del = _.unionWith        dla,    dlb,     _.isEqual
+        dla = _.intersectionWith ca.del, cb.same, _.isEqual               # deleted in a and unchanged in b
+        dlb = _.intersectionWith cb.del, ca.same, _.isEqual               # deleted in b and unchanged in a
+        del = _.unionWith        dla,    dlb,     _.isEqual               # deleted in b and unchanged in a
         
         c2a:  ca
         c2b:  cb

@@ -90,15 +90,11 @@
      * accepts three objects c, a and b
      * returns an object
      *
-     *   diff: [ list of [keypath, value_a, value_b] for conflicting values in a and b   ]
-     *   del:  [ list of [keypath, value_c]          for unproblematic deleted in a and or b ]
-     *   same: [ list of [keypath, value]            for unproblematic values in a and b ]
+     *   diff: [ list of [keypath, value_a, value_b] for conflicting values in a and b                 ]
+     *   del:  [ list of [keypath, value_c]          for deleted in (a or b) and unchanged in (b or a) ]
+     *   same: [ list of [keypath, value]            for same in a and b or only new in (a or b)       ]
      *
-     *   unproblematic:
-     *         values: same in a and b or only new in a or only new in b
-     *         deleted: deleted in both a and b or deleted in one and unchanged between c and the other
-     *
-     *   some intermediate results are included as well...
+     *   some intermediate results are included:
      * 
      *   c2a:  changes between c and a
      *   c2b:  changes between c and b
