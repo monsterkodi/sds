@@ -8,9 +8,11 @@
  */
 
 (function() {
-  var noon;
+  var noon, tools;
 
   noon = require('noon');
+
+  tools = require('./tools');
 
   module.exports = {
     extnames: noon.extnames,
@@ -21,7 +23,10 @@
     find: require('./find'),
     diff: require('./diff'),
     get: require('./get'),
-    regexp: require('./regexp')
+    regexp: require('./regexp'),
+    collect: require('./collect'),
+    toplevel: tools.toplevel,
+    sortpath: tools.sortpath
   };
 
 }).call(this);

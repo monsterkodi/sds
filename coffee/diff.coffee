@@ -6,12 +6,16 @@
 0000000    000  000       000
 ###
 
-_      = require 'lodash'
-regexp = require './regexp'
-get    = require './get'
-noon   = require 'noon'
+_       = require 'lodash'
+collect = require './collect'
+regexp  = require './regexp'
+get     = require './get'
+tools   = require './tools'
+noon    = require 'noon'
 
-log = console.log
+log      = console.log
+toplevel = tools.toplevel
+sortpath = tools.sortpath
 
 class diff
     
@@ -22,11 +26,22 @@ class diff
        000     000   000  000   000
        000     00     00   0000000 
     ###
+    ###
+    # accepts two objects a and b
+    # returns an object
+    #
+    #   diff: [ list of [keypath, value_a, value_b] for changed values      ]
+    #   same: [ list of [keypath, value]            for unchanged values    ]
+    #   new:  [ list of [keypath, value_b]          for new values in b     ]
+    #   del:  [ list of [keypath, value_a]          for values deleted in b ]
+    #
+    # the diff list might contain changes at keypath.length > 1
+    ###
     
     @two: (c, a) -> 
         
-        tc = @traverse c
-        ta = @traverse a
+        tc = collect c
+        ta = collect a
         
         pc0 = (x,y) -> x[0][0] == y[0][0]
         nac = _.differenceWith   ta, tc, pc0             # new
@@ -36,10 +51,10 @@ class diff
         dff = _.unionWith        tc, ta,  _.isEqual      # diff = all - new - del - same
         dff = _.differenceWith  dff, und, sme, tc, _.isEqual
 
-        diff: @sortpth dff.map    (t) -> [t[0], get(c, t[0]), t[1]] 
-        new:  @sortpth @toplevel nac
-        same: @sortpth @toplevel sme
-        del:  @sortpth @toplevel dac
+        diff: sortpath dff.map    (t) -> [t[0], get(c, t[0]), t[1]] 
+        new:  sortpath toplevel nac
+        same: sortpath toplevel sme
+        del:  sortpath toplevel dac
     
     ###
     000000000  000   000  00000000   00000000  00000000
@@ -47,6 +62,25 @@ class diff
        000     000000000  0000000    0000000   0000000 
        000     000   000  000   000  000       000     
        000     000   000  000   000  00000000  00000000
+    ###
+    ###
+    # accepts three objects c, a and b
+    # returns an object
+    #
+    #   diff: [ list of [keypath, value_a, value_b] for conflicting values in a and b   ]
+    #   del:  [ list of [keypath, value_c]          for unproblematic deleted in a and or b ]
+    #   same: [ list of [keypath, value]            for unproblematic values in a and b ]
+    #
+    #   unproblematic:
+    #         values: same in a and b or only new in a or only new in b
+    #         deleted: deleted in both a and b or deleted in one and unchanged between c and the other
+    #
+    #   some intermediate results are included as well...
+    # 
+    #   c2a:  changes between c and a
+    #   c2b:  changes between c and b
+    #   a2b:  changes between a and b
+    #   b2a:  changes between b and a
     ###
                 
     @three: (c, a, b) -> 
@@ -74,67 +108,20 @@ class diff
 
         dff = _.unionWith ca.diff, cb.diff, ca.new, cb.new,     _.isEqual # diff = union of diff and new
         dff = _.differenceWith dff, sme, keq                 #        minus union of sames
-        dff = @toplevel dff
+        dff = toplevel dff
         dff = dff.map (t) -> [t[0], get(a, t[0]), get(b, t[0])]
         dff = _.uniqWith dff, _.isEqual
 
         dla = _.intersectionWith ca.del, cb.same, _.isEqual
         dlb = _.intersectionWith cb.del, ca.same, _.isEqual
-        del = _.unionWith dla, dlb, _.isEqual
+        del = _.unionWith        dla,    dlb,     _.isEqual
         
         c2a:  ca
         c2b:  cb
         a2b:  ab
         b2a:  ba
-        same: @sortpth sme
-        diff: @sortpth dff
+        same: sortpath sme
+        diff: sortpath dff
         del:  del
-
-    ###
-    000000000  00000000    0000000   000   000  00000000  00000000    0000000  00000000
-       000     000   000  000   000  000   000  000       000   000  000       000     
-       000     0000000    000000000   000 000   0000000   0000000    0000000   0000000 
-       000     000   000  000   000     000     000       000   000       000  000     
-       000     000   000  000   000      0      00000000  000   000  0000000   00000000
-    ###
-    
-    @traverse: (node, count=-1, keyPath=[], result=[]) ->
-        switch node.constructor.name
-            when "Array"
-                for i in [0...node.length]
-                    v = node[i]
-                    keyPath.push i
-                    result.push [_.clone(keyPath), v]
-                    return result if count > 0 and result.length >= count
-                    if v?.constructor.name in ["Array", "Object"]
-                        @traverse v, count, keyPath, result
-                    keyPath.pop()
-            when "Object"
-                for k,v of node
-                    keyPath.push k
-                    result.push [_.clone(keyPath), v]
-                    return result if count > 0 and result.length >= count
-                    if v?.constructor.name in ["Array", "Object"]
-                        @traverse v, count, keyPath, result
-                    keyPath.pop()
-        return result
-
-    ###
-    000000000   0000000    0000000   000       0000000
-       000     000   000  000   000  000      000     
-       000     000   000  000   000  000      0000000 
-       000     000   000  000   000  000           000
-       000      0000000    0000000   0000000  0000000 
-    ###
-
-    @toplevel = (l) -> l.filter (t) -> t[0].length == 1
-
-    @sortpth = (l) -> 
-        l.sort (a,b) -> 
-            ap = a[0].join('.')
-            bp = b[0].join('.')
-            if ap == bp then 0
-            else if ap > bp then 1
-            else -1
-        
+                
 module.exports = diff

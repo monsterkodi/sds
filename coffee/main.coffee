@@ -6,7 +6,8 @@
 000   000  000   000  000  000   000
 ###
 
-noon = require 'noon'
+noon  = require 'noon'
+tools = require './tools'
 
 module.exports = 
     extnames:   noon.extnames
@@ -18,3 +19,6 @@ module.exports =
     diff:       require './diff'
     get:        require './get'
     regexp:     require './regexp'
+    collect:    require './collect'
+    toplevel:   tools.toplevel
+    sortpath:   tools.sortpath

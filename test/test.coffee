@@ -33,6 +33,54 @@ describe 'find', ->
     it 'should implement pathValue',     -> _.isFunction(sds.find.pathValue ).should.be.true    
 
 ###
+ 0000000   0000000   000      000      00000000   0000000  000000000
+000       000   000  000      000      000       000          000   
+000       000   000  000      000      0000000   000          000   
+000       000   000  000      000      000       000          000   
+ 0000000   0000000   0000000  0000000  00000000   0000000     000   
+###
+
+describe 'collect', ->
+    
+    o = 
+        a: 1
+        b: 
+            d: 2
+        c:
+            d: 3
+        d: 4
+    
+    it 'should filter path', ->
+        expect sds.collect o, (p, k, v) -> p[0] == 'a'
+        .to.eql [[['a'], 1]]
+
+        expect sds.collect o, (p, k, v) -> _.isEqual ['b', 'd'], p
+        .to.eql [[['b', 'd'], 2]]
+
+    it 'should filter key', ->
+        expect sds.collect o, (p, k, v) -> k == 'd'
+        .to.eql [[['b', 'd'], 2], [['c', 'd'], 3], [['d'], 4]]
+
+    it 'should filter value', ->
+        expect sds.collect o, (p, k, v) -> v <= '2'
+        .to.eql [[['a'], 1], [['b', 'd'], 2]]
+
+    it 'should filter path value', ->
+
+        expect sds.collect o, (p, k, v) -> p.length == 1 and _.isNumber v
+        .to.eql [[['a'], 1], [['d'], 4]]
+
+    it 'should filter key value', ->
+
+        expect sds.collect o, (p, k, v) -> k == 'd' and v > 3
+        .to.eql [[['d'], 4]]
+
+    it 'should map results', ->
+        expect sds.collect o, null, (p, v) -> v
+        .to.eql [1, d: 2, 2, d: 3, 3, 4]
+        
+
+###
 0000000    000  00000000  00000000
 000   000  000  000       000     
 000   000  000  000000    000000  
@@ -114,8 +162,8 @@ describe 'diff', ->
             
     it 'should diff traverse', -> 
         
-        expect sds.diff.traverse a
-        .to.eql dtra        
+        expect sds.collect a
+        .to.eql dtra
         
     c2a =
         diff:   [   [ [ 'm' ],     -5, 5              ]
@@ -196,7 +244,7 @@ describe 'diff', ->
             b2a:  sds.diff.two a, a
             diff: []
             del:  []
-            same: sds.diff.sortpth sds.diff.toplevel sds.diff.traverse a
+            same: sds.sortpath sds.toplevel sds.collect a
 
     it 'should diff three a a b', -> 
 
@@ -208,7 +256,7 @@ describe 'diff', ->
             b2a:  sds.diff.two b, a
             diff: []
             del:  a2b.del
-            same: sds.diff.sortpth sds.diff.traverse(b).filter (t) -> t[0].length == 1
+            same: sds.sortpath sds.toplevel sds.collect(b)
 
 ###
  0000000  000000000  00000000   000  000   000   0000000   000  00000000  000   000
