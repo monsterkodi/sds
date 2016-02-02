@@ -25,12 +25,8 @@
 
     diff.two = function(c, a) {
       var dac, dca, pc0, rst, ta, tc, uac, udd;
-      tc = this.traverse(c, function() {
-        return true;
-      });
-      ta = this.traverse(a, function() {
-        return true;
-      });
+      tc = this.traverse(c);
+      ta = this.traverse(a);
       pc0 = function(x, y) {
         return x[0][0] === y[0][0];
       };
@@ -77,7 +73,7 @@
        000     000   000  000   000      0      00000000  000   000  0000000   00000000
      */
 
-    diff.traverse = function(node, func, count, keyPath, result) {
+    diff.traverse = function(node, count, keyPath, result) {
       var i, j, k, ref, ref1, ref2, v;
       if (count == null) {
         count = -1;
@@ -93,14 +89,12 @@
           for (i = j = 0, ref = node.length; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
             v = node[i];
             keyPath.push(i);
-            if (func(keyPath, i, v)) {
-              result.push([_.clone(keyPath), v]);
-              if (count > 0 && result.length >= count) {
-                return result;
-              }
+            result.push([_.clone(keyPath), v]);
+            if (count > 0 && result.length >= count) {
+              return result;
             }
             if ((ref1 = v != null ? v.constructor.name : void 0) === "Array" || ref1 === "Object") {
-              this.traverse(v, func, count, keyPath, result);
+              this.traverse(v, count, keyPath, result);
             }
             keyPath.pop();
           }
@@ -109,14 +103,12 @@
           for (k in node) {
             v = node[k];
             keyPath.push(k);
-            if (func(keyPath, k, v)) {
-              result.push([_.clone(keyPath), v]);
-              if (count > 0 && result.length >= count) {
-                return result;
-              }
+            result.push([_.clone(keyPath), v]);
+            if (count > 0 && result.length >= count) {
+              return result;
             }
             if ((ref2 = v != null ? v.constructor.name : void 0) === "Array" || ref2 === "Object") {
-              this.traverse(v, func, count, keyPath, result);
+              this.traverse(v, count, keyPath, result);
             }
             keyPath.pop();
           }

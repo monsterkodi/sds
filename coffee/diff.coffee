@@ -3,7 +3,7 @@
 000   000  000  000       000     
 000   000  000  000000    000000  
 000   000  000  000       000     
-0000000    000  000       000     
+0000000    000  000       000
 ###
 
 _      = require 'lodash'
@@ -17,8 +17,8 @@ class diff
     
     @two: (c, a) -> 
         
-        tc = @traverse c, () -> true
-        ta = @traverse a, () -> true
+        tc = @traverse c
+        ta = @traverse a
         
         pc0 = (x,y) -> x[0][0] == y[0][0]
         dac = _.differenceWith   ta, tc, pc0
@@ -52,26 +52,24 @@ class diff
        000     000   000  000   000      0      00000000  000   000  0000000   00000000
     ###
     
-    @traverse: (node, func, count=-1, keyPath=[], result=[]) ->
+    @traverse: (node, count=-1, keyPath=[], result=[]) ->
         switch node.constructor.name
             when "Array"
                 for i in [0...node.length]
                     v = node[i]
                     keyPath.push i
-                    if func keyPath, i,v
-                        result.push [_.clone(keyPath), v]
-                        return result if count > 0 and result.length >= count
+                    result.push [_.clone(keyPath), v]
+                    return result if count > 0 and result.length >= count
                     if v?.constructor.name in ["Array", "Object"]
-                        @traverse v, func, count, keyPath, result
+                        @traverse v, count, keyPath, result
                     keyPath.pop()
             when "Object"
                 for k,v of node
                     keyPath.push k
-                    if func keyPath, k,v
-                        result.push [_.clone(keyPath), v]
-                        return result if count > 0 and result.length >= count
+                    result.push [_.clone(keyPath), v]
+                    return result if count > 0 and result.length >= count
                     if v?.constructor.name in ["Array", "Object"]
-                        @traverse v, func, count, keyPath, result
+                        @traverse v, count, keyPath, result
                     keyPath.pop()
         return result
         

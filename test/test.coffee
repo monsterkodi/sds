@@ -86,6 +86,32 @@ describe 'diff', ->
             x: 1
         y:  9
         x:  8
+
+    dtra = [
+        [['o'], 1 ]
+        [['p'], [1     ,       2, 3] ]
+        [['p' , 0]     , 1 ]
+        [['p' , 1]     , 2 ]
+        [['p' , 2]     , 3 ]
+        [['q'], {x: 1  , y: 2} ]
+        [['q', 'x'], 1 ]
+        [['q', 'y'], 2 ]
+        [['r'], null ]
+        [['s'], "s!s" ]
+        [['t'], {x: 1  , z: 3} ]
+        [['t', 'x'], 1 ]
+        [['t', 'z'], 3 ]
+        [['u'], x: 4 ]
+        [['u', 'x'], 4 ]
+        [['x'], 8 ]
+        [['y'], 9 ]
+        [['z'], 7 ]
+        ]    
+            
+    it 'should diff traverse', -> 
+        
+        expect sds.diff.traverse a
+        .to.eql dtra        
         
     d2ca =
         diff:   [   [ [ 'p' ], [1, 3], [ 1, 2, 3 ] ],
@@ -114,7 +140,7 @@ describe 'diff', ->
         del:    [   [ [ 'r' ], 1 ], 
                     [ [ 'v' ], 0 ], 
                     [ [ 'z' ], 7 ] ]
-            
+                    
     it 'should diff two', -> 
         
         expect sds.diff.two c, a
@@ -122,7 +148,14 @@ describe 'diff', ->
     
         expect sds.diff.two c, b
         .to.eql d2cb
-                        
+
+        expect sds.diff.two a, a
+        .to.eql 
+            same: dtra.filter (t) -> t[0].length == 1
+            diff: []
+            new:  []
+            del:  []
+            
     # it 'should diff three', -> 
     # 
     #     expect sds.diff.three c, a, b
