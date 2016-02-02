@@ -12,7 +12,8 @@ get = (node, keyPath) ->
     kp = _.clone keyPath
     while kp.length
         node = node[kp.shift()]
-        return if not node?
+        return null if node == null 
+        return undefined if not node?
     node
 
 module.exports = get

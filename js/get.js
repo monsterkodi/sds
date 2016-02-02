@@ -17,8 +17,11 @@
     kp = _.clone(keyPath);
     while (kp.length) {
       node = node[kp.shift()];
+      if (node === null) {
+        return null;
+      }
       if (node == null) {
-        return;
+        return void 0;
       }
     }
     return node;

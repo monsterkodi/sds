@@ -55,8 +55,10 @@ describe 'diff', ->
         v:  0
         x:  8
         z:  7
+        m: -5
         
     a =
+        m:  5
         o:  1
         p:  [1,2,3]
         q:  
@@ -86,26 +88,28 @@ describe 'diff', ->
             x: 1
         y:  9
         x:  8
+        m:  5
 
     dtra = [
-        [['o'], 1 ]
-        [['p'], [1     ,       2, 3] ]
-        [['p' , 0]     , 1 ]
-        [['p' , 1]     , 2 ]
-        [['p' , 2]     , 3 ]
-        [['q'], {x: 1  , y: 2} ]
-        [['q', 'x'], 1 ]
-        [['q', 'y'], 2 ]
-        [['r'], null ]
-        [['s'], "s!s" ]
-        [['t'], {x: 1  , z: 3} ]
-        [['t', 'x'], 1 ]
-        [['t', 'z'], 3 ]
-        [['u'], x: 4 ]
-        [['u', 'x'], 4 ]
-        [['x'], 8 ]
-        [['y'], 9 ]
-        [['z'], 7 ]
+        [['m'], 5               ]
+        [['o'], 1               ]
+        [['p'],     [1, 2, 3]   ]
+        [['p' , 0] , 1          ]
+        [['p' , 1] , 2          ]
+        [['p' , 2] , 3          ]
+        [['q'], {x: 1, y: 2}    ]
+        [['q' , 'x'] , 1        ]
+        [['q' , 'y'] , 2        ]
+        [['r'], null            ]
+        [['s'], "s!s"           ]
+        [['t'], {x: 1, z: 3}    ]
+        [['t' , 'x'] , 1        ]
+        [['t' , 'z'] , 3        ]
+        [['u'], x: 4            ]
+        [['u' , 'x'] , 4        ]
+        [['x'], 8               ]
+        [['y'], 9               ]
+        [['z'], 7               ]
         ]    
             
     it 'should diff traverse', -> 
@@ -113,41 +117,46 @@ describe 'diff', ->
         expect sds.diff.traverse a
         .to.eql dtra        
         
-    d2ca =
-        diff:   [   [ [ 'p' ], [1, 3], [ 1, 2, 3 ] ],
-                    [ [ 'p', 1 ], 3, 2 ],
-                    [ [ 'p', 2 ], undefined, 3 ],
-                    [ [ 'r' ], 1, null ],
-                    [ [ 's' ], 'sss', 's!s' ] ]
-        same:   [   [ [ 'q' ], { x: 1, y: 2 } ], 
-                    [ [ 'x' ], 8 ], 
-                    [ [ 'z' ], 7 ] ]
-        new:    [   [ [ 'o' ], 1 ]
-                    [ [ 't' ], { x: 1, z: 3 } ]
-                    [ [ 'u' ], { x: 4 } ]
-                    [ [ 'y' ], 9 ] ]
-        del:    [   [ [ 'v' ], 0 ] ]
+    c2a =
+        diff:   [   [ [ 'm' ],     -5, 5              ]
+                    [ [ 'p' ], [1, 3], [ 1, 2, 3 ]    ]
+                    [ [ 'p'  , 1 ]  ,         3, 2    ] 
+                    [ [ 'p'  , 2 ]  , undefined, 3    ] 
+                    [ [ 'r' ],     1, null            ]
+                    [ [ 's' ], 'sss', 's!s'           ] ]
+        same:   [   [ [ 'q' ], { x: 1, y: 2 }         ]
+                    [ [ 'x' ], 8                      ]
+                    [ [ 'z' ], 7                      ] ]
+        new:    [   [ [ 'o' ], 1                      ]
+                    [ [ 't' ], { x: 1    , z: 3 }     ]
+                    [ [ 'u' ], { x: 4 }               ]
+                    [ [ 'y' ], 9                      ] ]
+        del:    [   [ [ 'v' ], 0                      ] ]
 
-    d2cb = 
-        diff:   [   [ [ 'p' ], [ 1, 3 ], [ 1, 3, 2 ] ],
-                    [ [ 'p', 2 ], undefined, 2 ] ]
-        same:   [   [ [ 'q' ], { x: 1, y: 2 } ],
-                    [ [ 's' ], 'sss' ],
-                    [ [ 'x' ], 8 ] ]
-        new:    [   [ [ 't' ], { x: 'a', y: 2 } ],
-                    [ [ 'u' ], { x: 1 } ],
-                    [ [ 'y' ], 9 ] ]
-        del:    [   [ [ 'r' ], 1 ], 
-                    [ [ 'v' ], 0 ], 
-                    [ [ 'z' ], 7 ] ]
-                    
+    c2b = 
+        diff:   [   [ [ 'm' ],     -5, 5            ]
+                    [ [ 'p' ], [ 1, 3 ], [ 1, 3, 2  ] ]
+                    [ [ 'p', 2 ], undefined, 2 ]    ]
+        same:   [   [ [ 'q' ], { x: 1, y: 2 }       ]
+                    [ [ 's' ], 'sss'                ]
+                    [ [ 'x' ], 8                    ] ]
+        new:    [   [ [ 't' ], { x: 'a', y: 2 }     ]
+                    [ [ 'u' ], { x: 1 }             ]
+                    [ [ 'y' ], 9                    ] ]
+        del:    [   [ [ 'r' ], 1                    ]
+                    [ [ 'v' ], 0                    ]
+                    [ [ 'z' ], 7                    ] ]
+    
+    a2b = sds.diff.two a, b
+    b2a = sds.diff.two b, a
+                
     it 'should diff two', -> 
         
         expect sds.diff.two c, a
-        .to.eql d2ca
+        .to.eql c2a
     
         expect sds.diff.two c, b
-        .to.eql d2cb
+        .to.eql c2b
 
         expect sds.diff.two a, a
         .to.eql 
@@ -156,18 +165,51 @@ describe 'diff', ->
             new:  []
             del:  []
             
-    # it 'should diff three', -> 
-    # 
-    #     expect sds.diff.three c, a, b
-    #     .to.eql 
-    #         c2a:    d2ca
-    #         c2b:    d2cb
-    #         merge:
-    #             diff: []
-    #             same: []
-    #             new:  []
-    #             del:  []
+    it 'should diff three', -> 
+    
+        expect sds.diff.three c, a, b
+        .to.eql 
+            c2a:    c2a
+            c2b:    c2b
+            a2b:    a2b
+            b2a:    b2a
+            diff: [ [ [ 'p' ], [ 1, 2, 3 ], [ 1, 3, 2 ]         ]
+                    [ [ 'r' ], null, undefined                  ]
+                    [ [ 't' ], { x: 1, z: 3 }, { x: 'a', y: 2 } ]
+                    [ [ 'u' ], { x: 4 }, { x: 1 }               ] ]
+            same: [ [ [ 'm' ], 5                                ]
+                    [ [ 'o' ], 1                                ]
+                    [ [ 'q' ], { x: 1, y: 2 }                   ]
+                    [ [ 's' ], 's!s'                            ]
+                    [ [ 'x' ], 8                                ] 
+                    [ [ 'y' ], 9                                ] ]
+            del:  [ [ [ 'z' ], 7                                ] ]
             
+
+    it 'should diff three a a a', -> 
+
+        expect sds.diff.three a, a, a
+        .to.eql 
+            c2a:  sds.diff.two a, a
+            c2b:  sds.diff.two a, a
+            a2b:  sds.diff.two a, a
+            b2a:  sds.diff.two a, a
+            diff: []
+            del:  []
+            same: sds.diff.sortpth sds.diff.toplevel sds.diff.traverse a
+
+    it 'should diff three a a b', -> 
+
+        expect sds.diff.three a, a, b
+        .to.eql 
+            c2a:  sds.diff.two a, a
+            c2b:  sds.diff.two a, b
+            a2b:  sds.diff.two a, b
+            b2a:  sds.diff.two b, a
+            diff: []
+            del:  a2b.del
+            same: sds.diff.sortpth sds.diff.traverse(b).filter (t) -> t[0].length == 1
+
 ###
  0000000  000000000  00000000   000  000   000   0000000   000  00000000  000   000
 000          000     000   000  000  0000  000  000        000  000        000 000 
