@@ -20,11 +20,10 @@
     "yaml",
     "yml",
     "plist",
-    "data",
-    "load",
     "find",
     "search",
-    "convert",
+    "structured",
+    "data",
     "commandline tool",
     "cli"
   ],

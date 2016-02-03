@@ -8,7 +8,7 @@
  */
 
 (function() {
-  var _, args, colors, data, err, extname, find, fs, get, i, j, k, len, len1, log, noon, o, p, path, ref, result, s, v;
+  var _, args, colors, data, err, extname, find, fs, get, i, j, k, len, len1, log, noon, o, p, path, ref, ref1, result, s, set, v;
 
   _ = require('lodash');
 
@@ -19,8 +19,6 @@
   colors = require('colors');
 
   noon = require('noon');
-
-  get = require('./get');
 
   find = require('./find');
 
@@ -35,7 +33,7 @@
   000   000  000   000   0000000   0000000
    */
 
-  args = require('karg')("sds\n    file        . ? the file to search in    . * . = package.json\n    key         . ? key to search            \n    value       . ? value to search\n    path        . ? path to search           \n    format      . ? output format            \n    json        . ? parse as json            . = false\n    noon        . ? parse as noon            . = false\n    cson        . - C                        . = false\n    yaml                                     . = false\n    object                                   . = false\n    result                                   . = false\n    colors      . ? output with ansi colors  . = true\n    \nformat\n    @k  key\n    @v  value\n    @o  object\n    @p  path\n    \nshortcuts \n    -o  for @o\n    -r  for @v and no leading empty line\n\nversion     " + (require(__dirname + "/../package.json").version));
+  args = require('karg')("sds\n    file        . ? the file to search in    . * . = package.json\n    key         . ? key to search            \n    value       . ? value to search\n    path        . ? path to search           \n    format      . ? output format            \n    set         . ? set values \n    json        . ? parse as json            . = false\n    noon        . ? parse as noon            . = false\n    cson        . - C                        . = false\n    yaml                                     . = false\n    object                                   . = false\n    result                                   . = false\n    colors      . ? output with ansi colors  . = true\n    \nformat\n    @k  key\n    @v  value\n    @o  object\n    @p  path\n        \nshortcuts \n    -o  for @o\n    -r  for @v and no leading empty line\n\nversion     " + (require(__dirname + "/../package.json").version));
 
   err = function(msg) {
     log(("\n" + msg + "\n").red);
@@ -108,6 +106,28 @@
     };
   }
 
+  if (args.set != null) {
+
+    /*
+     0000000  00000000  000000000
+    000       000          000   
+    0000000   0000000      000   
+         000  000          000   
+    0000000   00000000     000
+     */
+    set = require('./set');
+    ref1 = noon.parse(args.set);
+    for (p in ref1) {
+      v = ref1[p];
+      set(data, p, v);
+    }
+    log(noon.stringify(data, {
+      colors: colors,
+      ext: extname
+    }));
+    process.exit(0);
+  }
+
   if ((args.key == null) && (args.value == null) && (args.path == null)) {
 
     /*
@@ -132,6 +152,7 @@
          000  000       000   000  000   000  000       000   000
     0000000   00000000  000   000  000   000   0000000  000   000
      */
+    get = require('./get');
     if (!args.result) {
       log('');
     }

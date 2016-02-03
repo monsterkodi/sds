@@ -11,7 +11,6 @@ fs     = require 'fs'
 path   = require 'path'
 colors = require 'colors'
 noon   = require 'noon'
-get    = require './get'
 find   = require './find'
 log    = console.log
 
@@ -30,6 +29,7 @@ sds
     value       . ? value to search
     path        . ? path to search           
     format      . ? output format            
+    set         . ? set values 
     json        . ? parse as json            . = false
     noon        . ? parse as noon            . = false
     cson        . - C                        . = false
@@ -43,7 +43,7 @@ format
     @v  value
     @o  object
     @p  path
-    
+        
 shortcuts 
     -o  for @o
     -r  for @v and no leading empty line
@@ -109,6 +109,25 @@ else
         string:  (s)->s
         null:    (s)->s
 
+
+if args.set?
+    
+    ###
+     0000000  00000000  000000000
+    000       000          000   
+    0000000   0000000      000   
+         000  000          000   
+    0000000   00000000     000   
+    ###
+    
+    set = require './set'
+    
+    for p,v of noon.parse args.set
+        set data, p, v
+        
+    log noon.stringify data, colors: colors, ext: extname
+    process.exit 0
+    
     
 if not args.key? and not args.value? and not args.path?
 
@@ -134,6 +153,8 @@ else
          000  000       000   000  000   000  000       000   000
     0000000   00000000  000   000  000   000   0000000  000   000
     ###
+      
+    get = require './get'
       
     if not args.result
         log ''

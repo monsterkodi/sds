@@ -14,9 +14,103 @@ describe 'module interface', ->
     it 'should implement save',             -> _.isFunction(sds.save        ).should.be.true
     it 'should implement find',             -> _.isFunction(sds.find        ).should.be.true
     it 'should implement get',              -> _.isFunction(sds.get         ).should.be.true
+    it 'should implement set',              -> _.isFunction(sds.set         ).should.be.true
     it 'should implement regexp',           -> _.isFunction(sds.regexp      ).should.be.true
     it 'should implement diff',             -> _.isFunction(sds.diff        ).should.be.true
 
+###
+ 0000000  00000000  000000000
+000       000          000   
+0000000   0000000      000   
+     000  000          000   
+0000000   00000000     000   
+###
+
+describe 'set', ->
+    
+    it 'should overwrite an existing value', ->
+        
+        expect sds.set a:1, ['a'], 2
+        .to.eql a:2
+
+    it 'should handle array indices', ->
+        
+        expect sds.set a: [1,0,3], ['a', 1], 2
+        .to.eql a:[1,2,3]
+
+        expect sds.set a: [1,0,3], ['a', '1'], 2
+        .to.eql a:[1,2,3]
+
+        expect sds.set [1,0,3], [1], 2
+        .to.eql [1,2,3]
+
+        expect sds.set [1,0,3], ['1'], 2
+        .to.eql [1,2,3]
+
+        expect sds.set [1,5,3,0], [0], 9
+        .to.eql [9,5,3,0]
+
+        expect sds.set [1,5,3,0], ['0'], 9
+        .to.eql [9,5,3,0]
+
+        expect sds.set a: [1,0,3], ['a', 1], 'x'
+        .to.eql a:[1,'x',3]
+
+        expect sds.set a: [1,0,3], ['a', '1'], 'x'
+        .to.eql a:[1,'x',3]
+        
+    it 'should accept string keypaths', ->
+        
+        expect sds.set a: [1,0,3], 'a.1', 2
+        .to.eql a:[1,2,3]
+
+        expect sds.set [1,0,3], '1', 2
+        .to.eql [1,2,3]
+
+        expect sds.set [1,5,3,0], '0', 9
+        .to.eql [9,5,3,0]
+
+        expect sds.set a: [1,0,3], 'a.1', 'x'
+        .to.eql a:[1,'x',3]
+
+        expect sds.set a: '1': 'y', 'a.1', 'x'
+        .to.eql a: '1': 'x'
+
+        expect sds.set a: '1': 'y', 'a.2', 'x'
+        .to.eql 
+            a: 
+                '1': 'y'
+                '2': 'x'
+        
+    it 'should create objects on the fly', ->
+
+        expect sds.set {}, 'a.b.c', true
+        .to.eql a: b: c: true
+        
+        expect sds.set a: null, 'a.b.c', true
+        .to.eql a: b: c: true
+
+    it 'should create arrays on the fly', ->
+        
+        expect sds.set [0], '1.0.0', true
+        .to.eql [0,[[true]]]
+
+        expect sds.set [], '0.0.0', true
+        .to.eql [[[true]]]
+
+    it 'should not change the nature of object on the fly', ->
+        expect sds.set [0,1,2], '1.0', true
+        .to.eql [0,1,2]
+
+        expect sds.set [0,1,2], '1', []
+        .to.eql [0,[],2]
+
+        expect sds.set [0,['bla'],2], '1.0', 1
+        .to.eql [0,[1],2]
+
+        expect sds.set [0,['bla'],2], '1.0.2', 1
+        .to.eql [0,['bla'],2]
+                
 ###
 00000000  000  000   000  0000000  
 000       000  0000  000  000   000
