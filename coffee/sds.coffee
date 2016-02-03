@@ -25,10 +25,11 @@ log    = console.log
 args = require('karg') """
 sds
     file        . ? the file to search in    . * . = package.json
+    output      . ? the file to write or stdout  . - F     
     key         . ? key to search            
     value       . ? value to search
     path        . ? path to search           
-    format      . ? output format
+    format      . ? result format
     set         . ? set values 
     json        . ? parse as json            . = false
     noon        . ? parse as noon            . = false
@@ -102,13 +103,31 @@ if args.colors
         number:  colors.magenta
         visited: colors.red
 else
-    colors = 
-        key:     (s)->s
-        path:    (s)->s
-        value:   (s)->s
-        string:  (s)->s
-        null:    (s)->s
+    colors = false
 
+###
+ 0000000   000   000  000000000
+000   000  000   000     000   
+000   000  000   000     000   
+000   000  000   000     000   
+ 0000000    0000000      000   
+###
+
+out = (s) ->
+    if args.output?
+        require('mkpath').sync path.dirname args.output
+        try
+            require('write-file-atomic') args.output, s, (err) ->
+                if err
+                    log "can't write #{args.output.bold.yellow}".bold.red
+                    log 'err', err
+                else
+                    log "wrote #{args.output.bold.white}".gray
+        catch err
+            log "can't write #{args.output.bold.yellow}".bold.red
+            log 'err', err
+    else
+        log s
 
 if args.set?
     
@@ -125,11 +144,9 @@ if args.set?
     for p,v of noon.parse args.set
         set data, p, v
         
-    log noon.stringify data, colors: colors, ext: extname
-    process.exit 0
-    
-    
-if not args.key? and not args.value? and not args.path?
+    out noon.stringify data, colors: colors, ext: extname
+        
+else if not args.key? and not args.value? and not args.path?
 
     ###
     000      000   0000000  000000000
@@ -140,9 +157,7 @@ if not args.key? and not args.value? and not args.path?
     ###
     
     s = noon.stringify data, colors: colors
-    log ''
-    log s
-    log ''
+    out '\n'+s+'\n'
     
 else      
     
@@ -196,13 +211,13 @@ else
                 o = {}
                 o[p] = v
                 s = noon.stringify o, colors: colors
-            log s
+            out s
     else
         o = {}
         for path in result
             o[path.join('.')] = get data, path
         s = noon.stringify o, colors: colors
-        log s
+        out s
         
     if not args.result
-        log ''
+        out ''

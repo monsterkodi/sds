@@ -8,7 +8,7 @@
  */
 
 (function() {
-  var _, args, colors, data, err, extname, find, fs, get, i, j, k, len, len1, log, noon, o, p, path, ref, ref1, result, s, set, v,
+  var _, args, colors, data, err, extname, find, fs, get, i, j, k, len, len1, log, noon, o, out, p, path, ref, ref1, result, s, set, v,
     indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   _ = require('lodash');
@@ -34,7 +34,7 @@
   000   000  000   000   0000000   0000000
    */
 
-  args = require('karg')("sds\n    file        . ? the file to search in    . * . = package.json\n    key         . ? key to search            \n    value       . ? value to search\n    path        . ? path to search           \n    format      . ? output format\n    set         . ? set values \n    json        . ? parse as json            . = false\n    noon        . ? parse as noon            . = false\n    cson        . - C                        . = false\n    yaml                                     . = false\n    object                                   . = false\n    result                                   . = false\n    colors      . ? output with ansi colors  . = true\n    \nformat\n    @k  key\n    @v  value\n    @o  object\n    @p  path\n        \nshortcuts \n    -o  for @o\n    -r  for @v and no leading empty line\n\nversion     " + (require(__dirname + "/../package.json").version));
+  args = require('karg')("sds\n    file        . ? the file to search in    . * . = package.json\n    output      . ? the file to write or stdout  . - F     \n    key         . ? key to search            \n    value       . ? value to search\n    path        . ? path to search           \n    format      . ? result format\n    set         . ? set values \n    json        . ? parse as json            . = false\n    noon        . ? parse as noon            . = false\n    cson        . - C                        . = false\n    yaml                                     . = false\n    object                                   . = false\n    result                                   . = false\n    colors      . ? output with ansi colors  . = true\n    \nformat\n    @k  key\n    @v  value\n    @o  object\n    @p  path\n        \nshortcuts \n    -o  for @o\n    -r  for @v and no leading empty line\n\nversion     " + (require(__dirname + "/../package.json").version));
 
   err = function(msg) {
     log(("\n" + msg + "\n").red);
@@ -88,24 +88,40 @@
       visited: colors.red
     };
   } else {
-    colors = {
-      key: function(s) {
-        return s;
-      },
-      path: function(s) {
-        return s;
-      },
-      value: function(s) {
-        return s;
-      },
-      string: function(s) {
-        return s;
-      },
-      "null": function(s) {
-        return s;
-      }
-    };
+    colors = false;
   }
+
+
+  /*
+   0000000   000   000  000000000
+  000   000  000   000     000   
+  000   000  000   000     000   
+  000   000  000   000     000   
+   0000000    0000000      000
+   */
+
+  out = function(s) {
+    var error;
+    if (args.output != null) {
+      require('mkpath').sync(path.dirname(args.output));
+      try {
+        return require('write-file-atomic')(args.output, s, function(err) {
+          if (err) {
+            log(("can't write " + args.output.bold.yellow).bold.red);
+            return log('err', err);
+          } else {
+            return log(("wrote " + args.output.bold.white).gray);
+          }
+        });
+      } catch (error) {
+        err = error;
+        log(("can't write " + args.output.bold.yellow).bold.red);
+        return log('err', err);
+      }
+    } else {
+      return log(s);
+    }
+  };
 
   if (args.set != null) {
 
@@ -122,14 +138,11 @@
       v = ref1[p];
       set(data, p, v);
     }
-    log(noon.stringify(data, {
+    out(noon.stringify(data, {
       colors: colors,
       ext: extname
     }));
-    process.exit(0);
-  }
-
-  if ((args.key == null) && (args.value == null) && (args.path == null)) {
+  } else if ((args.key == null) && (args.value == null) && (args.path == null)) {
 
     /*
     000      000   0000000  000000000
@@ -141,9 +154,7 @@
     s = noon.stringify(data, {
       colors: colors
     });
-    log('');
-    log(s);
-    log('');
+    out('\n' + s + '\n');
   } else {
 
     /*
@@ -194,7 +205,7 @@
             colors: colors
           });
         }
-        log(s);
+        out(s);
       }
     } else {
       o = {};
@@ -205,10 +216,10 @@
       s = noon.stringify(o, {
         colors: colors
       });
-      log(s);
+      out(s);
     }
     if (!args.result) {
-      log('');
+      out('');
     }
   }
 
