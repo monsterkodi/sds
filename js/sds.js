@@ -8,7 +8,8 @@
  */
 
 (function() {
-  var _, args, colors, data, err, extname, find, fs, get, i, j, k, len, len1, log, noon, o, p, path, ref, ref1, result, s, set, v;
+  var _, args, colors, data, err, extname, find, fs, get, i, j, k, len, len1, log, noon, o, p, path, ref, ref1, result, s, set, v,
+    indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   _ = require('lodash');
 
@@ -33,7 +34,7 @@
   000   000  000   000   0000000   0000000
    */
 
-  args = require('karg')("sds\n    file        . ? the file to search in    . * . = package.json\n    key         . ? key to search            \n    value       . ? value to search\n    path        . ? path to search           \n    format      . ? output format            \n    set         . ? set values \n    json        . ? parse as json            . = false\n    noon        . ? parse as noon            . = false\n    cson        . - C                        . = false\n    yaml                                     . = false\n    object                                   . = false\n    result                                   . = false\n    colors      . ? output with ansi colors  . = true\n    \nformat\n    @k  key\n    @v  value\n    @o  object\n    @p  path\n        \nshortcuts \n    -o  for @o\n    -r  for @v and no leading empty line\n\nversion     " + (require(__dirname + "/../package.json").version));
+  args = require('karg')("sds\n    file        . ? the file to search in    . * . = package.json\n    key         . ? key to search            \n    value       . ? value to search\n    path        . ? path to search           \n    format      . ? output format\n    set         . ? set values \n    json        . ? parse as json            . = false\n    noon        . ? parse as noon            . = false\n    cson        . - C                        . = false\n    yaml                                     . = false\n    object                                   . = false\n    result                                   . = false\n    colors      . ? output with ansi colors  . = true\n    \nformat\n    @k  key\n    @v  value\n    @o  object\n    @p  path\n        \nshortcuts \n    -o  for @o\n    -r  for @v and no leading empty line\n\nversion     " + (require(__dirname + "/../package.json").version));
 
   err = function(msg) {
     log(("\n" + msg + "\n").red);
@@ -52,11 +53,11 @@
 
   extname = args.json ? '.json' : args.cson ? '.cson' : args.noon ? '.noon' : args.yaml ? '.yaml' : path.extname(args.file);
 
-  if (extname !== '.json' && extname !== '.cson' && extname !== '.plist' && extname !== '.noon' && extname !== '.yml' && extname !== '.yaml') {
+  if (indexOf.call(noon.extnames, extname) < 0) {
     err("unknown file type: " + extname.yellow.bold + ". use --json --cson --noon or --yaml to force parsing.");
   }
 
-  data = noon.load(args.file);
+  data = noon.load(args.file, extname);
 
   if (!((ref = data.constructor.name) === 'Array' || ref === 'Object')) {
     err("no structure in file: " + args.file.yellow.bold);

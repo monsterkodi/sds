@@ -55,6 +55,9 @@ describe 'get', ->
         expect sds.get [1,[2,[3,4]]], '1.1.1'
         .to.eql 4
 
+        expect sds.get a:b:[c:[0,1]], 'a.b.0.c.1'
+        .to.eql 1
+
     it 'should return undefined for values not found', ->
         
         expect sds.get [1,a:2,3], '1.b'
@@ -64,6 +67,12 @@ describe 'get', ->
         .to.eql undefined
 
         expect sds.get [1,2,3], '-4'
+        .to.eql undefined
+
+        expect sds.get a:b:c:[0,1], 'a.0'
+        .to.eql undefined
+
+        expect sds.get a:b:c:[0,1], 'a.b.c.2'
         .to.eql undefined
         
 ###
@@ -147,6 +156,7 @@ describe 'set', ->
         .to.eql [[[true]]]
 
     it 'should not change the nature of object on the fly', ->
+        
         expect sds.set [0,1,2], '1.0', true
         .to.eql [0,1,2]
 

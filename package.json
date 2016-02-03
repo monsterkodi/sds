@@ -32,13 +32,13 @@
   },
   "dependencies": {
     "colors": "^1.1.2",
-    "lodash": "^4.1.0",
-    "karg": ">=0.3.2",
+    "lodash": "^4.2.1",
+    "karg": ">=1.0.1",
     "noon": ">=0.9.16"
   },
   "devDependencies": {
     "chai": "^3.5.0",
     "mocha": "^2.4.5",
-    "noon": "^0.9.17"
+    "noon": "^1.0.2"
   }
 }

@@ -28,7 +28,7 @@ sds
     key         . ? key to search            
     value       . ? value to search
     path        . ? path to search           
-    format      . ? output format            
+    format      . ? output format
     set         . ? set values 
     json        . ? parse as json            . = false
     noon        . ? parse as noon            . = false
@@ -71,10 +71,10 @@ extname =
     else
         path.extname args.file
     
-if extname not in ['.json', '.cson', '.plist', '.noon', '.yml', '.yaml']
+if extname not in noon.extnames
     err "unknown file type: #{extname.yellow.bold}. use --json --cson --noon or --yaml to force parsing."
 
-data = noon.load args.file
+data = noon.load args.file, extname
 
 if not (data.constructor.name in ['Array', 'Object'])
     err "no structure in file: #{args.file.yellow.bold}"
