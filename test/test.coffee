@@ -19,6 +19,54 @@ describe 'module interface', ->
     it 'should implement diff',             -> _.isFunction(sds.diff        ).should.be.true
 
 ###
+ 0000000   00000000  000000000
+000        000          000   
+000  0000  0000000      000   
+000   000  000          000   
+ 0000000   00000000     000   
+###
+
+describe 'get', ->
+    
+    it 'should get an existing value', ->
+        
+        expect sds.get a:1, ['a']
+        .to.eql 1
+
+        expect sds.get a:b:c:3, 'a.b.c'
+        .to.eql 3
+
+    it 'should get an existing list item', ->
+        
+        expect sds.get [1,2,3], ['1']
+        .to.eql 2
+
+        expect sds.get [1,[2,3]], [1,1]
+        .to.eql 3
+
+    it 'should get an existing value by string keypath', ->
+
+        expect sds.get [1,a:2,3], '0'
+        .to.eql 1
+        
+        expect sds.get [1,a:2,3], '1.a'
+        .to.eql 2
+
+        expect sds.get [1,[2,[3,4]]], '1.1.1'
+        .to.eql 4
+
+    it 'should return undefined for values not found', ->
+        
+        expect sds.get [1,a:2,3], '1.b'
+        .to.eql undefined
+
+        expect sds.get [1,2,3], '4'
+        .to.eql undefined
+
+        expect sds.get [1,2,3], '-4'
+        .to.eql undefined
+        
+###
  0000000  00000000  000000000
 000       000          000   
 0000000   0000000      000   

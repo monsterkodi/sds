@@ -7,11 +7,12 @@
 ###
 _ = require 'lodash'
 ###
-# accepts an object and a keypath
+# accepts an object and a keypath as a list or string and a value
 # returns the value at keypath or undefined
 ###
 
 get = (object, keypath) ->
+    keypath = keypath.split '.' if _.isString keypath
     kp = _.clone keypath
     while kp.length
         object = object[kp.shift()]

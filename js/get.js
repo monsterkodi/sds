@@ -14,12 +14,15 @@
 
 
   /*
-   * accepts an object and a keypath
+   * accepts an object and a keypath as a list or string and a value
    * returns the value at keypath or undefined
    */
 
   get = function(object, keypath) {
     var kp;
+    if (_.isString(keypath)) {
+      keypath = keypath.split('.');
+    }
     kp = _.clone(keypath);
     while (kp.length) {
       object = object[kp.shift()];
