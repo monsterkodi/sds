@@ -34,7 +34,7 @@
   000   000  000   000   0000000   0000000
    */
 
-  args = require('karg')("sds\n    file        . ? the file to search in    . * . = package.json\n    output      . ? the file to write or stdout  . - F     \n    key         . ? key to search            \n    value       . ? value to search\n    path        . ? path to search           \n    format      . ? result format\n    set         . ? set values \n    json        . ? parse as json            . = false\n    noon        . ? parse as noon            . = false\n    cson        . - C                        . = false\n    yaml                                     . = false\n    object                                   . = false\n    result                                   . = false\n    colors      . ? output with ansi colors  . = true\n    \nformat\n    @k  key\n    @v  value\n    @o  object\n    @p  path\n        \nshortcuts \n    -o  for @o\n    -r  for @v and no leading empty line\n\nversion     " + (require(__dirname + "/../package.json").version));
+  args = require('karg')("sds\n    file        . ? the file to search in           . *   . = package.json\n    key         . ? key to search            \n    value       . ? value to search\n    path        . ? path to search           \n    format      . ? result format\n    set         . ? set values \n    save        . ? write result back to input file . - S . = false \n    output      . ? the file to write or stdout     . - F     \n    json        . ? parse as json                         . = false\n    noon        . ? parse as noon                         . = false\n    cson        . - C                                     . = false\n    yaml                                                  . = false\n    object                                                . = false\n    result                                                . = false\n    colors      . ? output with ansi colors               . = true\n    \nformat\n    @k  key\n    @v  value\n    @o  object\n    @p  path\n        \nshortcuts \n    -o  for @o\n    -r  for @v and no leading empty line\n\nversion     " + (require(__dirname + "/../package.json").version));
 
   err = function(msg) {
     log(("\n" + msg + "\n").red);
@@ -100,22 +100,27 @@
    0000000    0000000      000
    */
 
+  if ((args.output != null) || args.save) {
+    colors = false;
+  }
+
   out = function(s) {
-    var error;
-    if (args.output != null) {
-      require('mkpath').sync(path.dirname(args.output));
+    var error, outfile, ref1;
+    outfile = (ref1 = args.output) != null ? ref1 : (args.save ? args.file : void 0);
+    if (outfile != null) {
+      require('mkpath').sync(path.dirname(outfile));
       try {
-        return require('write-file-atomic')(args.output, s, function(err) {
+        return require('write-file-atomic')(outfile, s, function(err) {
           if (err) {
-            log(("can't write " + args.output.bold.yellow).bold.red);
+            log(("can't write " + outfile.bold.yellow).bold.red);
             return log('err', err);
           } else {
-            return log(("wrote " + args.output.bold.white).gray);
+            return log(("wrote " + outfile.bold.white).gray);
           }
         });
       } catch (error) {
         err = error;
-        log(("can't write " + args.output.bold.yellow).bold.red);
+        log(("can't write " + outfile.bold.yellow).bold.red);
         return log('err', err);
       }
     } else {

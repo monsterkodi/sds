@@ -24,20 +24,21 @@ log    = console.log
 
 args = require('karg') """
 sds
-    file        . ? the file to search in    . * . = package.json
-    output      . ? the file to write or stdout  . - F     
+    file        . ? the file to search in           . *   . = package.json
     key         . ? key to search            
     value       . ? value to search
     path        . ? path to search           
     format      . ? result format
     set         . ? set values 
-    json        . ? parse as json            . = false
-    noon        . ? parse as noon            . = false
-    cson        . - C                        . = false
-    yaml                                     . = false
-    object                                   . = false
-    result                                   . = false
-    colors      . ? output with ansi colors  . = true
+    save        . ? write result back to input file . - S . = false 
+    output      . ? the file to write or stdout     . - F     
+    json        . ? parse as json                         . = false
+    noon        . ? parse as noon                         . = false
+    cson        . - C                                     . = false
+    yaml                                                  . = false
+    object                                                . = false
+    result                                                . = false
+    colors      . ? output with ansi colors               . = true
     
 format
     @k  key
@@ -113,18 +114,21 @@ else
  0000000    0000000      000   
 ###
 
+colors = false if args.output? or args.save
+
 out = (s) ->
-    if args.output?
-        require('mkpath').sync path.dirname args.output
+    outfile = args.output ? (args.file if args.save)
+    if outfile?
+        require('mkpath').sync path.dirname outfile
         try
-            require('write-file-atomic') args.output, s, (err) ->
+            require('write-file-atomic') outfile, s, (err) ->
                 if err
-                    log "can't write #{args.output.bold.yellow}".bold.red
+                    log "can't write #{outfile.bold.yellow}".bold.red
                     log 'err', err
                 else
-                    log "wrote #{args.output.bold.white}".gray
+                    log "wrote #{outfile.bold.white}".gray
         catch err
-            log "can't write #{args.output.bold.yellow}".bold.red
+            log "can't write #{outfile.bold.yellow}".bold.red
             log 'err', err
     else
         log s
