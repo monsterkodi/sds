@@ -53,6 +53,14 @@ shortcuts
 version     #{require("#{__dirname}/../package.json").version}
 """
 
+###
+00000000  00000000   00000000    0000000   00000000 
+000       000   000  000   000  000   000  000   000
+0000000   0000000    0000000    000   000  0000000  
+000       000   000  000   000  000   000  000   000
+00000000  000   000  000   000   0000000   000   000
+###
+
 err = (msg) ->
     log ("\n"+msg+"\n").red
     process.exit()
@@ -65,6 +73,14 @@ if not args.file?
 else if not fs.existsSync args.file
     err "can't find file: #{args.file.yellow.bold}"
 
+###
+00000000  000   000  000000000  000   000   0000000   00     00  00000000
+000        000 000      000     0000  000  000   000  000   000  000     
+0000000     00000       000     000 0 000  000000000  000000000  0000000 
+000        000 000      000     000  0000  000   000  000 0 000  000     
+00000000  000   000     000     000   000  000   000  000   000  00000000
+###
+
 extname =     
     if      args.json then '.json'
     else if args.cson then '.cson'
@@ -75,6 +91,19 @@ extname =
     
 if extname not in noon.extnames
     err "unknown file type: #{extname.yellow.bold}. use --json --cson --noon or --yaml to force parsing."
+
+outext = extname
+if args.output in noon.extnames
+    outext = args.output
+    delete args.output
+
+###
+000       0000000    0000000   0000000  
+000      000   000  000   000  000   000
+000      000   000  000000000  000   000
+000      000   000  000   000  000   000
+0000000   0000000   000   000  0000000  
+###
 
 data = noon.load args.file, extname
 
@@ -148,7 +177,7 @@ if args.set?
     for p,v of noon.parse args.set
         set data, p, v
         
-    out noon.stringify data, colors: colors, ext: extname
+    out noon.stringify data, colors: colors, ext: outext
         
 else if not args.key? and not args.value? and not args.path?
 
@@ -160,7 +189,7 @@ else if not args.key? and not args.value? and not args.path?
     0000000  000  0000000      000   
     ###
     
-    s = noon.stringify data, colors: colors
+    s = noon.stringify data, colors: colors, ext: outext
     out '\n'+s+'\n'
     
 else      

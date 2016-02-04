@@ -8,7 +8,7 @@
  */
 
 (function() {
-  var _, args, colors, data, err, extname, find, fs, get, i, j, k, len, len1, log, noon, o, out, p, path, ref, ref1, result, s, set, v,
+  var _, args, colors, data, err, extname, find, fs, get, i, j, k, len, len1, log, noon, o, out, outext, p, path, ref, ref1, ref2, result, s, set, v,
     indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   _ = require('lodash');
@@ -36,6 +36,15 @@
 
   args = require('karg')("sds\n    file        . ? the file to search in           . *   . = package.json\n    key         . ? key to search            \n    value       . ? value to search\n    path        . ? path to search           \n    format      . ? result format\n    set         . ? set values \n    save        . ? write result back to input file . - S . = false \n    output      . ? the file to write or stdout     . - F     \n    json        . ? parse as json                         . = false\n    noon        . ? parse as noon                         . = false\n    cson        . - C                                     . = false\n    yaml                                                  . = false\n    object                                                . = false\n    result                                                . = false\n    colors      . ? output with ansi colors               . = true\n    \nformat\n    @k  key\n    @v  value\n    @o  object\n    @p  path\n        \nshortcuts \n    -o  for @o\n    -r  for @v and no leading empty line\n\nversion     " + (require(__dirname + "/../package.json").version));
 
+
+  /*
+  00000000  00000000   00000000    0000000   00000000 
+  000       000   000  000   000  000   000  000   000
+  0000000   0000000    0000000    000   000  0000000  
+  000       000   000  000   000  000   000  000   000
+  00000000  000   000  000   000   0000000   000   000
+   */
+
   err = function(msg) {
     log(("\n" + msg + "\n").red);
     return process.exit();
@@ -51,15 +60,40 @@
     err("can't find file: " + args.file.yellow.bold);
   }
 
+
+  /*
+  00000000  000   000  000000000  000   000   0000000   00     00  00000000
+  000        000 000      000     0000  000  000   000  000   000  000     
+  0000000     00000       000     000 0 000  000000000  000000000  0000000 
+  000        000 000      000     000  0000  000   000  000 0 000  000     
+  00000000  000   000     000     000   000  000   000  000   000  00000000
+   */
+
   extname = args.json ? '.json' : args.cson ? '.cson' : args.noon ? '.noon' : args.yaml ? '.yaml' : path.extname(args.file);
 
   if (indexOf.call(noon.extnames, extname) < 0) {
     err("unknown file type: " + extname.yellow.bold + ". use --json --cson --noon or --yaml to force parsing.");
   }
 
+  outext = extname;
+
+  if (ref = args.output, indexOf.call(noon.extnames, ref) >= 0) {
+    outext = args.output;
+    delete args.output;
+  }
+
+
+  /*
+  000       0000000    0000000   0000000  
+  000      000   000  000   000  000   000
+  000      000   000  000000000  000   000
+  000      000   000  000   000  000   000
+  0000000   0000000   000   000  0000000
+   */
+
   data = noon.load(args.file, extname);
 
-  if (!((ref = data.constructor.name) === 'Array' || ref === 'Object')) {
+  if (!((ref1 = data.constructor.name) === 'Array' || ref1 === 'Object')) {
     err("no structure in file: " + args.file.yellow.bold);
   }
 
@@ -105,8 +139,8 @@
   }
 
   out = function(s) {
-    var error, outfile, ref1;
-    outfile = (ref1 = args.output) != null ? ref1 : (args.save ? args.file : void 0);
+    var error, outfile, ref2;
+    outfile = (ref2 = args.output) != null ? ref2 : (args.save ? args.file : void 0);
     if (outfile != null) {
       require('mkpath').sync(path.dirname(outfile));
       try {
@@ -138,14 +172,14 @@
     0000000   00000000     000
      */
     set = require('./set');
-    ref1 = noon.parse(args.set);
-    for (p in ref1) {
-      v = ref1[p];
+    ref2 = noon.parse(args.set);
+    for (p in ref2) {
+      v = ref2[p];
       set(data, p, v);
     }
     out(noon.stringify(data, {
       colors: colors,
-      ext: extname
+      ext: outext
     }));
   } else if ((args.key == null) && (args.value == null) && (args.path == null)) {
 
@@ -157,7 +191,8 @@
     0000000  000  0000000      000
      */
     s = noon.stringify(data, {
-      colors: colors
+      colors: colors,
+      ext: outext
     });
     out('\n' + s + '\n');
   } else {
