@@ -154,10 +154,7 @@ describe 'set', ->
         expect sds.set [], '0.0.0', true
         .to.eql [[[true]]]
 
-    it 'should not change the nature of object on the fly', ->
-        
-        expect sds.set [0,1,2], '1.0', true
-        .to.eql [0,1,2]
+    it 'should change the type of simple values on the fly', ->
 
         expect sds.set [0,1,2], '1', []
         .to.eql [0,[],2]
@@ -165,9 +162,31 @@ describe 'set', ->
         expect sds.set [0,['bla'],2], '1.0', 1
         .to.eql [0,[1],2]
 
-        expect sds.set [0,['bla'],2], '1.0.2', 1
-        .to.eql [0,['bla'],2]
-                
+    it 'should only accept strings and arrays as keypath', ->
+        
+        expect -> sds.set [0], 0, 1
+        .to.throw "invalid keypath: 0"
+
+        expect -> sds.set [0], {a:1}, 1
+        .to.throw "invalid keypath: {\"a\":1}"
+
+        expect -> sds.set [0], true, 1
+        .to.throw "invalid keypath: true"
+
+        expect -> sds.set [0], false, 1
+        .to.throw "invalid keypath: false"
+
+        expect -> sds.set [0], null, 1
+        .to.throw "invalid keypath: null"
+
+    it 'should not change the type of collection objects on the fly', ->
+        
+        expect -> sds.set [0,1,2], '1.0', true
+        .to.throw "couldn't set value true for keypath 1.0 in [0,1,2]"
+
+        expect -> sds.set [0,['bla'],2], '1.0.2', 1
+        .to.throw "couldn't set value 1 for keypath 1.0.2 in [0,[\"bla\"],2]"
+    
 ###
 00000000  000  000   000  0000000  
 000       000  0000  000  000   000
@@ -283,3 +302,41 @@ describe 'stringify', ->
         b: 2
         
         """
+
+###
+ 0000000   0000000          000  00000000   0000000  000000000  000  00000000  000   000
+000   000  000   000        000  000       000          000     000  000        000 000 
+000   000  0000000          000  0000000   000          000     000  000000      00000  
+000   000  000   000  000   000  000       000          000     000  000          000   
+ 0000000   0000000     0000000   00000000   0000000     000     000  000          000   
+###
+
+o = a: 1, b: [1,2], c: null
+l = [
+        [['a'], 1]
+        [['b'], [1, 2]]
+        [['c'], null]
+    ]
+
+describe 'objectify', ->
+        
+    it 'should objectify', ->
+        
+        expect sds.objectify l
+        .to.eql o
+
+###
+000      000   0000000  000000000  000  00000000  000   000
+000      000  000          000     000  000        000 000 
+000      000  0000000      000     000  000000      00000  
+000      000       000     000     000  000          000   
+0000000  000  0000000      000     000  000          000   
+###
+
+describe 'listify', ->
+    
+    it 'should listify', ->
+        
+        expect sds.listify o        
+        .to.eql l
+    

@@ -14,7 +14,7 @@
 
 
   /*
-   * accepts an object, a keypath as a list or string and a value
+   * accepts an object, a keypath as an array or string and a value
    * returns the object with value set at keypath
    */
 
@@ -22,6 +22,9 @@
     var k, kp, o;
     if (_.isString(keypath)) {
       keypath = keypath.split('.');
+    }
+    if (!_.isArray(keypath)) {
+      throw "invalid keypath: " + (JSON.stringify(keypath));
     }
     kp = _.clone(keypath);
     o = object;
@@ -40,7 +43,7 @@
     if (kp.length === 1 && (o != null)) {
       o[kp[0]] = value;
       if (o[kp[0]] !== value) {
-        console.log("couldn't set value for keypath " + (keypath.join('.')) + " in " + object);
+        throw "couldn't set value " + (JSON.stringify(value)) + " for keypath " + (keypath.join('.')) + " in " + (JSON.stringify(object));
       }
     }
     return object;

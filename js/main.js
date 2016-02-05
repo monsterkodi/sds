@@ -26,7 +26,9 @@
     regexp: require('./regexp'),
     collect: require('./collect'),
     toplevel: tools.toplevel,
-    sortpath: tools.sortpath
+    sortpath: tools.sortpath,
+    listify: tools.listify,
+    objectify: tools.objectify
   };
 
 }).call(this);

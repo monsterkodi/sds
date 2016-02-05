@@ -7,12 +7,13 @@
 ###
 _ = require 'lodash'
 ###
-# accepts an object, a keypath as a list or string and a value
+# accepts an object, a keypath as an array or string and a value
 # returns the object with value set at keypath
 ###
 
 set = (object, keypath, value) ->
     keypath = keypath.split '.' if _.isString keypath
+    throw "invalid keypath: #{JSON.stringify keypath}" if not _.isArray keypath
     kp = _.clone keypath
     o = object
     while kp.length > 1
@@ -28,7 +29,7 @@ set = (object, keypath, value) ->
     if kp.length == 1 and o?
         o[kp[0]] = value
         if o[kp[0]] != value
-            console.log "couldn't set value for keypath #{keypath.join '.'} in #{object}" 
+            throw "couldn't set value #{JSON.stringify value} for keypath #{keypath.join '.'} in #{JSON.stringify object}"
     object
 
 module.exports = set

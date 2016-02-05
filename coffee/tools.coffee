@@ -6,6 +6,9 @@
    000      0000000    0000000   0000000  0000000 
 ###
 
+_   = require 'lodash'
+set = require './set'
+
 module.exports = 
 
     ###
@@ -42,3 +45,36 @@ module.exports =
             else if ap > bp then 1
             else -1
 
+    ###
+     0000000   0000000          000  00000000   0000000  000000000  000  00000000  000   000
+    000   000  000   000        000  000       000          000     000  000        000 000 
+    000   000  0000000          000  0000000   000          000     000  000000      00000  
+    000   000  000   000  000   000  000       000          000     000  000          000   
+     0000000   0000000     0000000   00000000   0000000     000     000  000          000   
+    ###
+    #
+    # accepts a list of [keypath, ... value] pairs
+    # returns an object contructed from that list
+    #
+
+    objectify: (l) ->
+        o = {}
+        for pv in l
+            # console.log pv, pv[0]
+            if pv.length > 1
+                set o, pv[0], _.last pv
+        o
+
+    ###
+    000      000   0000000  000000000  000  00000000  000   000
+    000      000  000          000     000  000        000 000 
+    000      000  0000000      000     000  000000      00000  
+    000      000       000     000     000  000          000   
+    0000000  000  0000000      000     000  000          000   
+    ###
+    #
+    # accepts an object o
+    # returns a list of [keypath, value] pairs for o
+    #
+
+    listify: (o) -> module.exports.toplevel require('./collect') o

@@ -22,3 +22,5 @@ module.exports =
     collect:    require './collect'
     toplevel:   tools.toplevel
     sortpath:   tools.sortpath
+    listify:    tools.listify
+    objectify:  tools.objectify
