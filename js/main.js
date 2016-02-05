@@ -21,7 +21,6 @@
     load: noon.load,
     save: noon.save,
     find: require('./find'),
-    diff: require('./diff'),
     get: require('./get'),
     set: require('./set'),
     regexp: require('./regexp'),
