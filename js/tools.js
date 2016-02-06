@@ -30,6 +30,34 @@
     },
 
     /*
+     0000000  00     00  00000000   00000000    0000000   000000000  000   000
+    000       000   000  000   000  000   000  000   000     000     000   000
+    000       000000000  00000000   00000000   000000000     000     000000000
+    000       000 0 000  000        000        000   000     000     000   000
+     0000000  000   000  000        000        000   000     000     000   000
+     */
+    cmppath: function(a, b) {
+      var al, bl, i, j, ref;
+      al = a.length;
+      bl = b.length;
+      for (i = j = 0, ref = Math.min(al, bl); 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
+        if (a[i] > b[i]) {
+          return 1;
+        }
+        if (a[i] < b[i]) {
+          return -1;
+        }
+      }
+      if (al > bl) {
+        return 1;
+      }
+      if (al < bl) {
+        return -1;
+      }
+      return 0;
+    },
+
+    /*
      0000000   0000000   00000000   000000000  00000000    0000000   000000000  000   000
     000       000   000  000   000     000     000   000  000   000     000     000   000
     0000000   000   000  0000000       000     00000000   000000000     000     000000000
@@ -38,24 +66,7 @@
      */
     sortpath: function(l) {
       return l.sort(function(a, b) {
-        var al, bl, i, j, ref;
-        al = a[0].length;
-        bl = a[0].length;
-        for (i = j = 0, ref = Math.min(al, bl); 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
-          if (a[0][i] > b[0][i]) {
-            return 1;
-          }
-          if (a[0][i] < b[0][i]) {
-            return -1;
-          }
-        }
-        if (al > bl) {
-          return 1;
-        }
-        if (al < bl) {
-          return -1;
-        }
-        return 0;
+        return module.exports.cmppath(a[0], b[0]);
       });
     },
 

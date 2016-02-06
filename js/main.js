@@ -27,6 +27,7 @@
     collect: require('./collect'),
     toplevel: tools.toplevel,
     sortpath: tools.sortpath,
+    cmppath: tools.cmppath,
     listify: tools.listify,
     objectify: tools.objectify
   };

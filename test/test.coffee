@@ -340,3 +340,58 @@ describe 'listify', ->
         expect sds.listify o        
         .to.eql l
     
+###
+ 0000000  00     00  00000000   00000000    0000000   000000000  000   000
+000       000   000  000   000  000   000  000   000     000     000   000
+000       000000000  00000000   00000000   000000000     000     000000000
+000       000 0 000  000        000        000   000     000     000   000
+ 0000000  000   000  000        000        000   000     000     000   000
+###
+    
+describe 'cmppath', ->
+    
+    it 'should return 0 for a == b', -> 
+        
+        expect sds.cmppath [0,1,2], [0,1,2]
+        .to.eql 0
+
+        expect sds.cmppath [0,'1',2], [0,1,'2']
+        .to.eql 0
+
+        expect sds.cmppath ['0'], [0]
+        .to.eql 0
+
+    it 'should return -1 for a < b', -> 
+        
+        expect sds.cmppath [0,1,2], [0,1,2,3]
+        .to.eql -1
+
+        expect sds.cmppath [0,1,2], [0,1,3]
+        .to.eql -1
+
+        expect sds.cmppath [0,'a',2], [0,'b',0]
+        .to.eql -1
+
+    it 'should return 1 for a > b', -> 
+        
+        expect sds.cmppath [0,1,2], [0,1]
+        .to.eql 1
+        
+        expect sds.cmppath [0,1,2], [0,1,1,5]
+        .to.eql 1
+    
+###
+ 0000000   0000000   00000000   000000000  00000000    0000000   000000000  000   000
+000       000   000  000   000     000     000   000  000   000     000     000   000
+0000000   000   000  0000000       000     00000000   000000000     000     000000000
+     000  000   000  000   000     000     000        000   000     000     000   000
+0000000    0000000   000   000     000     000        000   000     000     000   000
+###
+
+describe 'sortpath', ->
+    
+    it 'should sort', ->
+        
+        expect sds.sortpath [[['z'], 1], [['y', 3], 2], [['y', 2], 3]]
+        .to.eql [[['y', 2], 3], [['y', 3], 2], [['z'], 1]]
+    
