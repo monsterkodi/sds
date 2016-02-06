@@ -90,7 +90,7 @@ module.exports =
     ###
     #
     # accepts an object o
-    # returns a list of [keypath, value] pairs for o
+    # returns a list of [keypath, value] pairs for toplevel values in o
     #
 
     listify: (o) -> module.exports.toplevel require('./collect') o
