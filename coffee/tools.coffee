@@ -39,11 +39,14 @@ module.exports =
     sortpath: (l) -> 
         
         l.sort (a,b) -> 
-            ap = a[0].join('.')
-            bp = b[0].join('.')
-            if ap == bp then 0
-            else if ap > bp then 1
-            else -1
+            al = a[0].length
+            bl = a[0].length
+            for i in [0...Math.min al, bl]
+                if a[0][i] > b[0][i] then return 1
+                if a[0][i] < b[0][i] then return -1
+            if al > bl then return 1
+            if al < bl then return -1
+            0
 
     ###
      0000000   0000000          000  00000000   0000000  000000000  000  00000000  000   000
@@ -60,7 +63,6 @@ module.exports =
     objectify: (l) ->
         o = {}
         for pv in l
-            # console.log pv, pv[0]
             if pv.length > 1
                 set o, pv[0], _.last pv
         o

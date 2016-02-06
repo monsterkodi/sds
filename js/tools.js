@@ -38,16 +38,24 @@
      */
     sortpath: function(l) {
       return l.sort(function(a, b) {
-        var ap, bp;
-        ap = a[0].join('.');
-        bp = b[0].join('.');
-        if (ap === bp) {
-          return 0;
-        } else if (ap > bp) {
+        var al, bl, i, j, ref;
+        al = a[0].length;
+        bl = a[0].length;
+        for (i = j = 0, ref = Math.min(al, bl); 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
+          if (a[0][i] > b[0][i]) {
+            return 1;
+          }
+          if (a[0][i] < b[0][i]) {
+            return -1;
+          }
+        }
+        if (al > bl) {
           return 1;
-        } else {
+        }
+        if (al < bl) {
           return -1;
         }
+        return 0;
       });
     },
 
@@ -59,10 +67,10 @@
      0000000   0000000     0000000   00000000   0000000     000     000  000          000
      */
     objectify: function(l) {
-      var i, len, o, pv;
+      var j, len, o, pv;
       o = {};
-      for (i = 0, len = l.length; i < len; i++) {
-        pv = l[i];
+      for (j = 0, len = l.length; j < len; j++) {
+        pv = l[j];
         if (pv.length > 1) {
           set(o, pv[0], _.last(pv));
         }
