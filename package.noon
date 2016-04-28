@@ -27,12 +27,12 @@ scripts
                 test  mocha -R dot --compilers coffee:coffee-script/register
 dependencies
                 colors          ^1.1.2
-                karg            >=1.0.3
-                lodash          ^4.2.1
+                karg            >=1.0.7
+                lodash          ^4.11.1
                 mkpath          ^1.0.0
                 noon            >=0.9.16
                 write-file-atomic  ^1.1.4
 devDependencies
                 chai    ^3.5.0
                 mocha   ^2.4.5
-                noon    ^1.0.4
+                noon    ^1.0.6
