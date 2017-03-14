@@ -1,5 +1,5 @@
 name            sds
-version         1.8.0
+version         1.8.1
 description     structured data search
 main            ./js/main.js
 author          monsterkodi
