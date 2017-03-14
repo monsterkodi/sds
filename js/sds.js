@@ -8,7 +8,7 @@
  */
 
 (function() {
-  var _, args, colors, data, err, extname, find, fs, get, i, j, k, len, len1, log, noon, o, out, outext, p, path, ref, ref1, ref2, result, s, set, v,
+  var _, args, argsFile, colors, data, error, extname, file, find, fs, get, i, j, k, l, len, len1, len2, log, noon, o, out, outext, p, path, ref, ref1, ref2, ref3, result, s, set, v,
     indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   _ = require('lodash');
@@ -45,7 +45,7 @@
   00000000  000   000  000   000   0000000   000   000
    */
 
-  err = function(msg) {
+  error = function(msg) {
     log(("\n" + msg + "\n").red);
     return process.exit();
   };
@@ -53,11 +53,28 @@
   if (args.file == null) {
     if (fs.existsSync('./package.json')) {
       args.file = './package.json';
+    } else if (fs.existsSync('./package.noon')) {
+      args.file = './package.noon';
     } else {
-      err('no input file provided!');
+      error('no input file provided!');
     }
   } else if (!fs.existsSync(args.file)) {
-    err("can't find file: " + args.file.yellow.bold);
+    argsFile = args.file;
+    if ((args.value == null) && (args.key == null) && (args.path == null)) {
+      ref = ['./package.json', './package.noon'];
+      for (i = 0, len = ref.length; i < len; i++) {
+        file = ref[i];
+        if (fs.existsSync(file)) {
+          args.result = true;
+          args.path = argsFile;
+          args.file = file;
+          break;
+        }
+      }
+    }
+    if (argsFile === args.file) {
+      error("can't find file: " + args.file.yellow.bold);
+    }
   }
 
 
@@ -72,12 +89,12 @@
   extname = args.json ? '.json' : args.cson ? '.cson' : args.noon ? '.noon' : args.yaml ? '.yaml' : path.extname(args.file);
 
   if (indexOf.call(noon.extnames, extname) < 0) {
-    err("unknown file type: " + extname.yellow.bold + ". use --json --cson --noon or --yaml to force parsing.");
+    error("unknown file type: " + extname.yellow.bold + ". use --json --cson --noon or --yaml to force parsing.");
   }
 
   outext = extname;
 
-  if (ref = args.output, indexOf.call(noon.extnames, ref) >= 0) {
+  if (ref1 = args.output, indexOf.call(noon.extnames, ref1) >= 0) {
     outext = args.output;
     delete args.output;
   }
@@ -93,8 +110,8 @@
 
   data = noon.load(args.file, extname);
 
-  if (!((ref1 = data.constructor.name) === 'Array' || ref1 === 'Object')) {
-    err("no structure in file: " + args.file.yellow.bold);
+  if (!((ref2 = data.constructor.name) === 'Array' || ref2 === 'Object')) {
+    error("no structure in file: " + args.file.yellow.bold);
   }
 
 
@@ -139,23 +156,21 @@
   }
 
   out = function(s) {
-    var error, outfile, ref2;
-    outfile = (ref2 = args.output) != null ? ref2 : (args.save ? args.file : void 0);
+    var err, outfile, ref3;
+    outfile = (ref3 = args.output) != null ? ref3 : (args.save ? args.file : void 0);
     if (outfile != null) {
       require('mkpath').sync(path.dirname(outfile));
       try {
         return require('write-file-atomic')(outfile, s, function(err) {
           if (err) {
-            log(("can't write " + outfile.bold.yellow).bold.red);
-            return log('err', err);
+            return error("can't write " + outfile.bold.yellow + ": " + err);
           } else {
             return log(("wrote " + outfile.bold.white).gray);
           }
         });
-      } catch (error) {
-        err = error;
-        log(("can't write " + outfile.bold.yellow).bold.red);
-        return log('err', err);
+      } catch (error1) {
+        err = error1;
+        return error("can't write " + outfile.bold.yellow + ": " + err);
       }
     } else {
       return log(s);
@@ -172,9 +187,9 @@
     0000000   00000000     000
      */
     set = require('./set');
-    ref2 = noon.parse(args.set);
-    for (p in ref2) {
-      v = ref2[p];
+    ref3 = noon.parse(args.set);
+    for (p in ref3) {
+      v = ref3[p];
       set(data, p, v);
     }
     out(noon.stringify(data, {
@@ -210,8 +225,8 @@
     }
     result = (args.path != null) && (args.value != null) ? find.pathValue(data, args.path, args.value) : args.path != null ? find.path(data, args.path) : (args.key != null) && (args.value != null) ? find.keyValue(data, args.key, args.value) : args.key != null ? find.key(data, args.key) : find.value(data, args.value);
     if (args.object || args.result || args.format) {
-      for (i = 0, len = result.length; i < len; i++) {
-        path = result[i];
+      for (j = 0, len1 = result.length; j < len1; j++) {
+        path = result[j];
         p = path.join('.');
         k = _.last(path);
         v = get(data, path);
@@ -249,8 +264,8 @@
       }
     } else {
       o = {};
-      for (j = 0, len1 = result.length; j < len1; j++) {
-        path = result[j];
+      for (l = 0, len2 = result.length; l < len2; l++) {
+        path = result[l];
         o[path.join('.')] = get(data, path);
       }
       s = noon.stringify(o, {

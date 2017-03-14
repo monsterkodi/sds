@@ -61,17 +61,28 @@ version     #{require("#{__dirname}/../package.json").version}
 00000000  000   000  000   000   0000000   000   000
 ###
 
-err = (msg) ->
+error = (msg) ->
     log ("\n"+msg+"\n").red
     process.exit()
 
 if not args.file?
     if fs.existsSync './package.json'
         args.file = './package.json'
+    else if fs.existsSync './package.noon'
+        args.file = './package.noon'
     else
-        err 'no input file provided!'
+        error 'no input file provided!'
 else if not fs.existsSync args.file
-    err "can't find file: #{args.file.yellow.bold}"
+    argsFile = args.file
+    if !args.value? and !args.key? and !args.path?    
+        for file in ['./package.json', './package.noon']
+            if fs.existsSync file
+                args.result = true
+                args.path   = argsFile
+                args.file   = file
+                break
+    if argsFile == args.file
+        error "can't find file: #{args.file.yellow.bold}"
 
 ###
 00000000  000   000  000000000  000   000   0000000   00     00  00000000
@@ -90,7 +101,7 @@ extname =
         path.extname args.file
     
 if extname not in noon.extnames
-    err "unknown file type: #{extname.yellow.bold}. use --json --cson --noon or --yaml to force parsing."
+    error "unknown file type: #{extname.yellow.bold}. use --json --cson --noon or --yaml to force parsing."
 
 outext = extname
 if args.output in noon.extnames
@@ -108,7 +119,7 @@ if args.output in noon.extnames
 data = noon.load args.file, extname
 
 if not (data.constructor.name in ['Array', 'Object'])
-    err "no structure in file: #{args.file.yellow.bold}"
+    error "no structure in file: #{args.file.yellow.bold}"
 
 ###
  0000000   0000000   000       0000000   00000000    0000000
@@ -152,13 +163,11 @@ out = (s) ->
         try
             require('write-file-atomic') outfile, s, (err) ->
                 if err
-                    log "can't write #{outfile.bold.yellow}".bold.red
-                    log 'err', err
+                    error "can't write #{outfile.bold.yellow}: #{err}"
                 else
                     log "wrote #{outfile.bold.white}".gray
         catch err
-            log "can't write #{outfile.bold.yellow}".bold.red
-            log 'err', err
+            error "can't write #{outfile.bold.yellow}: #{err}"
     else
         log s
 
