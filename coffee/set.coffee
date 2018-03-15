@@ -5,7 +5,9 @@
      000  000          000   
 0000000   00000000     000   
 ###
-_ = require 'lodash'
+
+{ _ } = require 'kxk'
+
 ###
 # accepts an object, a keypath as an array or string and a value
 # returns the object with value set at keypath

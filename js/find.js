@@ -1,88 +1,69 @@
-
-/*
-00000000  000  000   000  0000000  
-000       000  0000  000  000   000
-000000    000  000 0 000  000   000
-000       000  000  0000  000   000
-000       000  000   000  0000000
- */
-
 (function() {
+  /*
+  00000000  000  000   000  0000000  
+  000       000  0000  000  000   000
+  000000    000  000 0 000  000   000
+  000       000  000  0000  000   000
+  000       000  000   000  0000000  
+  */
   var _, collect, find, regexp;
 
-  _ = require('lodash');
+  ({_} = require('kxk'));
 
   regexp = require('./regexp');
 
   collect = require('./collect');
 
-  find = (function() {
-    function find() {}
-
-
+  find = class find {
     /*
      * accept an object and a (key, path or value)
      * return a list of keypaths for matching (key, path or value)
      */
-
-    find.key = function(object, key) {
+    static key(object, key) {
       var keyReg;
       keyReg = this.reg(key);
-      return this.traverse(object, (function(_this) {
-        return function(p, k, v) {
-          return _this.match(k, keyReg);
-        };
-      })(this));
-    };
+      return this.traverse(object, (p, k, v) => {
+        return this.match(k, keyReg);
+      });
+    }
 
-    find.path = function(object, path) {
+    static path(object, path) {
       var pthReg;
       pthReg = this.reg(path);
-      return this.traverse(object, (function(_this) {
-        return function(p, k, v) {
-          return _this.matchPath(p, pthReg);
-        };
-      })(this));
-    };
+      return this.traverse(object, (p, k, v) => {
+        return this.matchPath(p, pthReg);
+      });
+    }
 
-    find.value = function(object, val) {
+    static value(object, val) {
       var valReg;
       valReg = this.reg(val);
-      return this.traverse(object, (function(_this) {
-        return function(p, k, v) {
-          return _this.match(v, valReg);
-        };
-      })(this));
-    };
-
+      return this.traverse(object, (p, k, v) => {
+        return this.match(v, valReg);
+      });
+    }
 
     /*
      * accept an object, a (key or path) and a value
      * return a list of keypaths for matching (key or path) and value combinations
      */
-
-    find.keyValue = function(object, key, val) {
+    static keyValue(object, key, val) {
       var keyReg, valReg;
       keyReg = this.reg(key);
       valReg = this.reg(val);
-      return this.traverse(object, (function(_this) {
-        return function(p, k, v) {
-          return _this.match(k, keyReg) && _this.match(v, valReg);
-        };
-      })(this));
-    };
+      return this.traverse(object, (p, k, v) => {
+        return this.match(k, keyReg) && this.match(v, valReg);
+      });
+    }
 
-    find.pathValue = function(object, path, val) {
+    static pathValue(object, path, val) {
       var pthReg, valReg;
       pthReg = this.reg(path);
       valReg = this.reg(val);
-      return this.traverse(object, (function(_this) {
-        return function(p, k, v) {
-          return _this.matchPath(p, pthReg) && _this.match(v, valReg);
-        };
-      })(this));
-    };
-
+      return this.traverse(object, (p, k, v) => {
+        return this.matchPath(p, pthReg) && this.match(v, valReg);
+      });
+    }
 
     /*
     00     00   0000000   000000000   0000000  000   000
@@ -90,34 +71,30 @@
     000000000  000000000     000     000       000000000
     000 0 000  000   000     000     000       000   000
     000   000  000   000     000      0000000  000   000
-     */
-
-    find.matchPath = function(a, r) {
+    */
+    static matchPath(a, r) {
       return this.match(a.join('.'), r);
-    };
+    }
 
-    find.match = function(a, r) {
+    static match(a, r) {
       var ref;
       if (!_.isArray(a)) {
         return (ref = String(a).match(r)) != null ? ref.length : void 0;
       } else {
         return false;
       }
-    };
-
+    }
 
     /*
     00000000   00000000   0000000 
     000   000  000       000      
     0000000    0000000   000  0000
     000   000  000       000   000
-    000   000  00000000   0000000
-     */
-
-    find.reg = function(s) {
+    000   000  00000000   0000000 
+    */
+    static reg(s) {
       return regexp(s);
-    };
-
+    }
 
     /*
     000000000  00000000    0000000   000   000  00000000  00000000    0000000  00000000
@@ -125,18 +102,18 @@
        000     0000000    000000000   000 000   0000000   0000000    0000000   0000000 
        000     000   000  000   000     000     000       000   000       000  000     
        000     000   000  000   000      0      00000000  000   000  0000000   00000000
-     */
-
-    find.traverse = function(object, func) {
+    */
+    static traverse(object, func) {
       return collect(object, func, function(p, v) {
         return p;
       });
-    };
+    }
 
-    return find;
-
-  })();
+  };
 
   module.exports = find;
 
 }).call(this);
+
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZmluZC5qcyIsInNvdXJjZVJvb3QiOiIuLiIsInNvdXJjZXMiOlsianMvZmluZC5qcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUFBOzs7Ozs7O0FBQUEsTUFBQSxDQUFBLEVBQUEsT0FBQSxFQUFBLElBQUEsRUFBQTs7RUFRQSxDQUFBLENBQUUsQ0FBRixDQUFBLEdBQVUsT0FBQSxDQUFRLEtBQVIsQ0FBVjs7RUFDQSxNQUFBLEdBQVUsT0FBQSxDQUFRLFVBQVI7O0VBQ1YsT0FBQSxHQUFVLE9BQUEsQ0FBUSxXQUFSOztFQUVKLE9BQU4sTUFBQSxLQUFBLENBQUE7Ozs7O0lBT1UsT0FBTCxHQUFLLENBQUMsTUFBRCxFQUFTLEdBQVQsQ0FBQTtBQUNGLFVBQUE7TUFBQSxNQUFBLEdBQVMsSUFBQyxDQUFBLEdBQUQsQ0FBSyxHQUFMO2FBQ1QsSUFBQyxDQUFBLFFBQUQsQ0FBVSxNQUFWLEVBQWtCLENBQUMsQ0FBRCxFQUFHLENBQUgsRUFBSyxDQUFMLENBQUEsR0FBQTtlQUFXLElBQUMsQ0FBQSxLQUFELENBQU8sQ0FBUCxFQUFVLE1BQVY7TUFBWCxDQUFsQjtJQUZFOztJQUlDLE9BQU4sSUFBTSxDQUFDLE1BQUQsRUFBUyxJQUFULENBQUE7QUFDSCxVQUFBO01BQUEsTUFBQSxHQUFTLElBQUMsQ0FBQSxHQUFELENBQUssSUFBTDthQUNULElBQUMsQ0FBQSxRQUFELENBQVUsTUFBVixFQUFrQixDQUFDLENBQUQsRUFBRyxDQUFILEVBQUssQ0FBTCxDQUFBLEdBQUE7ZUFBVyxJQUFDLENBQUEsU0FBRCxDQUFXLENBQVgsRUFBYyxNQUFkO01BQVgsQ0FBbEI7SUFGRzs7SUFJQyxPQUFQLEtBQU8sQ0FBQyxNQUFELEVBQVMsR0FBVCxDQUFBO0FBQ0osVUFBQTtNQUFBLE1BQUEsR0FBUyxJQUFDLENBQUEsR0FBRCxDQUFLLEdBQUw7YUFDVCxJQUFDLENBQUEsUUFBRCxDQUFVLE1BQVYsRUFBa0IsQ0FBQyxDQUFELEVBQUcsQ0FBSCxFQUFLLENBQUwsQ0FBQSxHQUFBO2VBQVcsSUFBQyxDQUFBLEtBQUQsQ0FBTyxDQUFQLEVBQVUsTUFBVjtNQUFYLENBQWxCO0lBRkksQ0FSUjs7Ozs7O0lBaUJXLE9BQVYsUUFBVSxDQUFDLE1BQUQsRUFBUyxHQUFULEVBQWMsR0FBZCxDQUFBO0FBQ1AsVUFBQSxNQUFBLEVBQUE7TUFBQSxNQUFBLEdBQVMsSUFBQyxDQUFBLEdBQUQsQ0FBSyxHQUFMO01BQ1QsTUFBQSxHQUFTLElBQUMsQ0FBQSxHQUFELENBQUssR0FBTDthQUNULElBQUMsQ0FBQSxRQUFELENBQVUsTUFBVixFQUFrQixDQUFDLENBQUQsRUFBRyxDQUFILEVBQUssQ0FBTCxDQUFBLEdBQUE7ZUFBVyxJQUFDLENBQUEsS0FBRCxDQUFPLENBQVAsRUFBVSxNQUFWLENBQUEsSUFBc0IsSUFBQyxDQUFBLEtBQUQsQ0FBTyxDQUFQLEVBQVUsTUFBVjtNQUFqQyxDQUFsQjtJQUhPOztJQUtBLE9BQVYsU0FBVSxDQUFDLE1BQUQsRUFBUyxJQUFULEVBQWUsR0FBZixDQUFBO0FBQ1AsVUFBQSxNQUFBLEVBQUE7TUFBQSxNQUFBLEdBQVMsSUFBQyxDQUFBLEdBQUQsQ0FBSyxJQUFMO01BQ1QsTUFBQSxHQUFTLElBQUMsQ0FBQSxHQUFELENBQUssR0FBTDthQUNULElBQUMsQ0FBQSxRQUFELENBQVUsTUFBVixFQUFrQixDQUFDLENBQUQsRUFBRyxDQUFILEVBQUssQ0FBTCxDQUFBLEdBQUE7ZUFBVyxJQUFDLENBQUEsU0FBRCxDQUFXLENBQVgsRUFBYyxNQUFkLENBQUEsSUFBMEIsSUFBQyxDQUFBLEtBQUQsQ0FBTyxDQUFQLEVBQVUsTUFBVjtNQUFyQyxDQUFsQjtJQUhPLENBdEJYOzs7Ozs7Ozs7SUFtQ1ksT0FBWCxTQUFXLENBQUMsQ0FBRCxFQUFJLENBQUosQ0FBQTthQUFVLElBQUMsQ0FBQSxLQUFELENBQU8sQ0FBQyxDQUFDLElBQUYsQ0FBTyxHQUFQLENBQVAsRUFBb0IsQ0FBcEI7SUFBVjs7SUFFSixPQUFQLEtBQU8sQ0FBQyxDQUFELEVBQUcsQ0FBSCxDQUFBO0FBQ0osVUFBQTtNQUFBLElBQUcsQ0FBSSxDQUFDLENBQUMsT0FBRixDQUFVLENBQVYsQ0FBUDt1REFDc0IsQ0FBRSxnQkFEeEI7T0FBQSxNQUFBO2VBR0ksTUFISjs7SUFESSxDQXJDUjs7Ozs7Ozs7O0lBbURNLE9BQUwsR0FBSyxDQUFDLENBQUQsQ0FBQTthQUFPLE1BQUEsQ0FBTyxDQUFQO0lBQVAsQ0FuRE47Ozs7Ozs7OztJQTZEVyxPQUFWLFFBQVUsQ0FBQyxNQUFELEVBQVMsSUFBVCxDQUFBO2FBQWtCLE9BQUEsQ0FBUSxNQUFSLEVBQWdCLElBQWhCLEVBQXNCLFFBQUEsQ0FBQyxDQUFELEVBQUcsQ0FBSCxDQUFBO2VBQVM7TUFBVCxDQUF0QjtJQUFsQjs7RUFwRWY7O0VBc0VBLE1BQU0sQ0FBQyxPQUFQLEdBQWlCO0FBbEZqQiIsInNvdXJjZXNDb250ZW50IjpbIiMjI1xuMDAwMDAwMDAgIDAwMCAgMDAwICAgMDAwICAwMDAwMDAwICBcbjAwMCAgICAgICAwMDAgIDAwMDAgIDAwMCAgMDAwICAgMDAwXG4wMDAwMDAgICAgMDAwICAwMDAgMCAwMDAgIDAwMCAgIDAwMFxuMDAwICAgICAgIDAwMCAgMDAwICAwMDAwICAwMDAgICAwMDBcbjAwMCAgICAgICAwMDAgIDAwMCAgIDAwMCAgMDAwMDAwMCAgXG4jIyNcblxueyBfIH0gICA9IHJlcXVpcmUgJ2t4aydcbnJlZ2V4cCAgPSByZXF1aXJlICcuL3JlZ2V4cCdcbmNvbGxlY3QgPSByZXF1aXJlICcuL2NvbGxlY3QnXG5cbmNsYXNzIGZpbmRcblxuICAgICMjI1xuICAgICMgYWNjZXB0IGFuIG9iamVjdCBhbmQgYSAoa2V5LCBwYXRoIG9yIHZhbHVlKVxuICAgICMgcmV0dXJuIGEgbGlzdCBvZiBrZXlwYXRocyBmb3IgbWF0Y2hpbmcgKGtleSwgcGF0aCBvciB2YWx1ZSlcbiAgICAjIyNcblxuICAgIEBrZXk6IChvYmplY3QsIGtleSkgLT4gXG4gICAgICAgIGtleVJlZyA9IEByZWcga2V5IFxuICAgICAgICBAdHJhdmVyc2Ugb2JqZWN0LCAocCxrLHYpID0+IEBtYXRjaCBrLCBrZXlSZWdcblxuICAgIEBwYXRoOiAob2JqZWN0LCBwYXRoKSAtPiBcbiAgICAgICAgcHRoUmVnID0gQHJlZyBwYXRoXG4gICAgICAgIEB0cmF2ZXJzZSBvYmplY3QsIChwLGssdikgPT4gQG1hdGNoUGF0aChwLCBwdGhSZWcpXG5cbiAgICBAdmFsdWU6IChvYmplY3QsIHZhbCkgLT4gXG4gICAgICAgIHZhbFJlZyA9IEByZWcgdmFsICAgICAgICAgXG4gICAgICAgIEB0cmF2ZXJzZSBvYmplY3QsIChwLGssdikgPT4gQG1hdGNoIHYsIHZhbFJlZ1xuXG4gICAgIyMjXG4gICAgIyBhY2NlcHQgYW4gb2JqZWN0LCBhIChrZXkgb3IgcGF0aCkgYW5kIGEgdmFsdWVcbiAgICAjIHJldHVybiBhIGxpc3Qgb2Yga2V5cGF0aHMgZm9yIG1hdGNoaW5nIChrZXkgb3IgcGF0aCkgYW5kIHZhbHVlIGNvbWJpbmF0aW9uc1xuICAgICMjI1xuICAgICAgICBcbiAgICBAa2V5VmFsdWU6IChvYmplY3QsIGtleSwgdmFsKSAtPiBcbiAgICAgICAga2V5UmVnID0gQHJlZyBrZXkgXG4gICAgICAgIHZhbFJlZyA9IEByZWcgdmFsIFxuICAgICAgICBAdHJhdmVyc2Ugb2JqZWN0LCAocCxrLHYpID0+IEBtYXRjaChrLCBrZXlSZWcpIGFuZCBAbWF0Y2godiwgdmFsUmVnKVxuICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgQHBhdGhWYWx1ZToob2JqZWN0LCBwYXRoLCB2YWwpIC0+IFxuICAgICAgICBwdGhSZWcgPSBAcmVnIHBhdGhcbiAgICAgICAgdmFsUmVnID0gQHJlZyB2YWwgICAgICAgICBcbiAgICAgICAgQHRyYXZlcnNlIG9iamVjdCwgKHAsayx2KSA9PiBAbWF0Y2hQYXRoKHAsIHB0aFJlZykgYW5kIEBtYXRjaCh2LCB2YWxSZWcpXG4gICAgICAgIFxuICAgICMjI1xuICAgIDAwICAgICAwMCAgIDAwMDAwMDAgICAwMDAwMDAwMDAgICAwMDAwMDAwICAwMDAgICAwMDBcbiAgICAwMDAgICAwMDAgIDAwMCAgIDAwMCAgICAgMDAwICAgICAwMDAgICAgICAgMDAwICAgMDAwXG4gICAgMDAwMDAwMDAwICAwMDAwMDAwMDAgICAgIDAwMCAgICAgMDAwICAgICAgIDAwMDAwMDAwMFxuICAgIDAwMCAwIDAwMCAgMDAwICAgMDAwICAgICAwMDAgICAgIDAwMCAgICAgICAwMDAgICAwMDBcbiAgICAwMDAgICAwMDAgIDAwMCAgIDAwMCAgICAgMDAwICAgICAgMDAwMDAwMCAgMDAwICAgMDAwXG4gICAgIyMjXG4gICAgXG4gICAgQG1hdGNoUGF0aDogKGEsIHIpIC0+IEBtYXRjaCBhLmpvaW4oJy4nKSwgclxuICAgICAgICBcbiAgICBAbWF0Y2g6IChhLHIpIC0+XG4gICAgICAgIGlmIG5vdCBfLmlzQXJyYXkgYVxuICAgICAgICAgICAgU3RyaW5nKGEpLm1hdGNoKHIpPy5sZW5ndGhcbiAgICAgICAgZWxzZVxuICAgICAgICAgICAgZmFsc2VcblxuICAgICMjI1xuICAgIDAwMDAwMDAwICAgMDAwMDAwMDAgICAwMDAwMDAwIFxuICAgIDAwMCAgIDAwMCAgMDAwICAgICAgIDAwMCAgICAgIFxuICAgIDAwMDAwMDAgICAgMDAwMDAwMCAgIDAwMCAgMDAwMFxuICAgIDAwMCAgIDAwMCAgMDAwICAgICAgIDAwMCAgIDAwMFxuICAgIDAwMCAgIDAwMCAgMDAwMDAwMDAgICAwMDAwMDAwIFxuICAgICMjI1xuICAgIFxuICAgIEByZWc6IChzKSAtPiByZWdleHAgc1xuXG4gICAgIyMjXG4gICAgMDAwMDAwMDAwICAwMDAwMDAwMCAgICAwMDAwMDAwICAgMDAwICAgMDAwICAwMDAwMDAwMCAgMDAwMDAwMDAgICAgMDAwMDAwMCAgMDAwMDAwMDBcbiAgICAgICAwMDAgICAgIDAwMCAgIDAwMCAgMDAwICAgMDAwICAwMDAgICAwMDAgIDAwMCAgICAgICAwMDAgICAwMDAgIDAwMCAgICAgICAwMDAgICAgIFxuICAgICAgIDAwMCAgICAgMDAwMDAwMCAgICAwMDAwMDAwMDAgICAwMDAgMDAwICAgMDAwMDAwMCAgIDAwMDAwMDAgICAgMDAwMDAwMCAgIDAwMDAwMDAgXG4gICAgICAgMDAwICAgICAwMDAgICAwMDAgIDAwMCAgIDAwMCAgICAgMDAwICAgICAwMDAgICAgICAgMDAwICAgMDAwICAgICAgIDAwMCAgMDAwICAgICBcbiAgICAgICAwMDAgICAgIDAwMCAgIDAwMCAgMDAwICAgMDAwICAgICAgMCAgICAgIDAwMDAwMDAwICAwMDAgICAwMDAgIDAwMDAwMDAgICAwMDAwMDAwMFxuICAgICMjI1xuICAgIFxuICAgIEB0cmF2ZXJzZTogKG9iamVjdCwgZnVuYykgLT4gY29sbGVjdCBvYmplY3QsIGZ1bmMsIChwLHYpIC0+IHBcbiAgICAgICAgXG5tb2R1bGUuZXhwb3J0cyA9IGZpbmRcbiJdfQ==
+//# sourceURL=C:/Users/kodi/s/sds/coffee/find.coffee

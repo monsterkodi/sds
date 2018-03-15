@@ -5,7 +5,8 @@
 000       000  000  0000  000   000
 000       000  000   000  0000000  
 ###
-_       = require 'lodash'
+
+{ _ }   = require 'kxk'
 regexp  = require './regexp'
 collect = require './collect'
 

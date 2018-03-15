@@ -6,8 +6,8 @@
 000   000  000   000  000  000   000
 ###
 
-noon  = require 'noon'
-tools = require './tools'
+{ noon } = require 'kxk'
+tools    = require './tools'
 
 module.exports = 
     extnames:   noon.extnames

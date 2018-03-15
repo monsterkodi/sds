@@ -6,11 +6,8 @@
 0000000   0000000    0000000 
 ###
 
-_      = require 'lodash'
-fs     = require 'fs'
-path   = require 'path'
-colors = require 'colors'
-noon   = require 'noon'
+{ colors, noon, slash, karg, fs, _ } = require 'kxk'
+
 find   = require './find'
 log    = console.log
 
@@ -22,7 +19,7 @@ log    = console.log
 000   000  000   000   0000000   0000000 
 ###
 
-args = require('karg') """
+args = karg """
 sds
     file        . ? the file to search in           . *   . = package.json
     key         . ? key to search            
@@ -98,7 +95,7 @@ extname =
     else if args.noon then '.noon'
     else if args.yaml then '.yaml'
     else
-        path.extname args.file
+        slash.extname args.file
     
 if extname not in noon.extnames
     error "unknown file type: #{extname.yellow.bold}. use --json --cson --noon or --yaml to force parsing."
@@ -159,7 +156,7 @@ colors = false if args.output? or args.save
 out = (s) ->
     outfile = args.output ? (args.file if args.save)
     if outfile?
-        require('mkpath').sync path.dirname outfile
+        require('mkpath').sync slash.dirname outfile
         try
             require('write-file-atomic') outfile, s, (err) ->
                 if err
@@ -230,7 +227,7 @@ else
                     
     if args.object or args.result or args.format
         for path in result
-            p = path.join '.'
+            p = slash.join '.'
             k = _.last path
             v = get data, path
 
@@ -257,7 +254,7 @@ else
     else
         o = {}
         for path in result
-            o[path.join('.')] = get data, path
+            o[slash.join('.')] = get data, path
         s = noon.stringify o, colors: colors
         out s
         

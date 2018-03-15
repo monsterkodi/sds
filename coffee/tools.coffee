@@ -6,7 +6,7 @@
    000      0000000    0000000   0000000  0000000 
 ###
 
-_   = require 'lodash'
+{ _ } = require 'kxk'
 set = require './set'
 
 module.exports = 
