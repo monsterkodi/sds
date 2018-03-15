@@ -6,7 +6,7 @@
 0000000   0000000    0000000 
 ###
 
-{ colors, noon, slash, karg, fs, _ } = require 'kxk'
+{ colors, noon, slash, karg, atomic, fs, _ } = require 'kxk'
 
 find   = require './find'
 log    = console.log
@@ -156,9 +156,9 @@ colors = false if args.output? or args.save
 out = (s) ->
     outfile = args.output ? (args.file if args.save)
     if outfile?
-        require('mkpath').sync slash.dirname outfile
+        fs.ensureDirSync slash.dirname outfile
         try
-            require('write-file-atomic') outfile, s, (err) ->
+            atomic outfile, s, (err) ->
                 if err
                     error "can't write #{outfile.bold.yellow}: #{err}"
                 else

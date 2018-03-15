@@ -1,6 +1,6 @@
 {
   "name": "sds",
-  "version": "1.9.0",
+  "version": "1.9.1",
   "description": "structured data search",
   "main": "./js/main.js",
   "author": "monsterkodi",
@@ -31,8 +31,7 @@
     "test": "mocha -R dot --compilers coffee:coffee-script/register"
   },
   "dependencies": {
-    "kxk": "^0.41.0",
-    "mkpath": "^1.0.0"
+    "kxk": "^0.42.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",
