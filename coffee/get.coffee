@@ -13,12 +13,12 @@
 # returns the value at keypath or undefined
 ###
 
-get = (object, keypath, default) ->
+get = (object, keypath, defaultValue) ->
     keypath = keypath.split '.' if _.isString keypath
     kp = _.clone keypath
     while kp.length
         object = object[kp.shift()]
-        return default
+        return defaultValue if not object?
     object
 
 module.exports = get
