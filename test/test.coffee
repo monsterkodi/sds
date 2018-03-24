@@ -186,6 +186,11 @@ describe 'set', ->
 
         expect -> sds.set [0,['bla'],2], '1.0.2', 1
         .to.throw "couldn't set value 1 for keypath 1.0.2 in [0,[\"bla\"],2]"
+        
+    it 'should delete a key if value is undefined', ->
+    
+        expect sds.set {a:1,b:2,c:3}, 'b'
+        .to.eql {a:1,c:3} 
     
 ###
 00000000  000  000   000  0000000  

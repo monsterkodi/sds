@@ -14,10 +14,13 @@
 ###
 
 set = (object, keypath, value) ->
+    
     keypath = keypath.split '.' if _.isString keypath
     throw "invalid keypath: #{JSON.stringify keypath}" if not _.isArray keypath
+    
     kp = _.clone keypath
     o = object
+    
     while kp.length > 1
         k = kp.shift()
         if not o[k]?
@@ -29,9 +32,12 @@ set = (object, keypath, value) ->
             o = o[k]
             
     if kp.length == 1 and o?
-        o[kp[0]] = value
-        if o[kp[0]] != value
-            throw "couldn't set value #{JSON.stringify value} for keypath #{keypath.join '.'} in #{JSON.stringify object}"
+        if value == undefined
+            delete o[kp[0]]
+        else
+            o[kp[0]] = value
+            if o[kp[0]] != value
+                throw "couldn't set value #{JSON.stringify value} for keypath #{keypath.join '.'} in #{JSON.stringify object}"
     object
 
 module.exports = set
