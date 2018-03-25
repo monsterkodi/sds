@@ -6,8 +6,13 @@
 0000000   0000000    0000000 
 ###
 
-{ colors, noon, slash, karg, atomic, fs, _ } = require 'kxk'
-
+colors = require 'colors'
+noon   = require 'noon'
+slash  = require 'path'
+fs     = require 'fs'
+atomic = require 'write-file-atomic'
+_      = require 'lodash'
+karg   = require 'karg'
 find   = require './find'
 log    = console.log
 

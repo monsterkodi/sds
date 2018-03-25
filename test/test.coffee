@@ -1,4 +1,4 @@
-{ _ }  = require 'kxk'
+_      = require 'lodash'
 assert = require 'assert'
 chai   = require 'chai'
 sds    = require '../'
