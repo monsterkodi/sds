@@ -40,7 +40,7 @@ sds
     yaml                                                  . = false
     object                                                . = false
     result                                                . = false
-    colors      . ? output with ansi colors               . = true
+    colors      . ? output with ansi colors               . = false
     
 format
     @k  key
