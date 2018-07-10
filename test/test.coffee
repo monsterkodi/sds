@@ -191,7 +191,13 @@ describe 'set', ->
     
         expect sds.set {a:1,b:2,c:3}, 'b'
         .to.eql {a:1,c:3} 
-    
+
+        expect sds.set {a: {b:2,c:3} }, 'a.b'
+        .to.eql {a:{c:3}} 
+
+        expect sds.set {a: {c:3} }, 'a.c'
+        .to.eql {a:{}} 
+        
 ###
 00000000  000  000   000  0000000  
 000       000  0000  000  000   000
