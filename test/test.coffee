@@ -297,14 +297,6 @@ describe 'stringify', ->
         }
         """
 
-    it 'should output cson', -> 
-        
-        expect sds.stringify o, ext: '.cson'
-        .to.eql """
-        a: 1
-        b: 2
-        """
-
     it 'should output yaml', -> 
         
         expect sds.stringify o, ext: '.yaml'
