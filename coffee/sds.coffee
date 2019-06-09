@@ -6,23 +6,21 @@
 0000000   0000000    0000000 
 ###
 
-colors = require 'colors'
+# ▸start 'sds'
+
 noon   = require 'noon'
 slash  = require 'path'
 fs     = require 'fs'
-atomic = require 'write-file-atomic'
-_      = require 'lodash'
 karg   = require 'karg'
 find   = require './find'
-log    = console.log
+kolor  = require('klor').kolor
+kolor.globalize()
 
-###
- 0000000   00000000    0000000    0000000
-000   000  000   000  000        000     
-000000000  0000000    000  0000  0000000 
-000   000  000   000  000   000       000
-000   000  000   000   0000000   0000000 
-###
+#  0000000   00000000    0000000    0000000
+# 000   000  000   000  000        000     
+# 000000000  0000000    000  0000  0000000 
+# 000   000  000   000  000   000       000
+# 000   000  000   000   0000000   0000000 
 
 args = karg """
 sds
@@ -36,7 +34,6 @@ sds
     output      . ? the file to write or stdout     . - F     
     json        . ? parse as json                         . = false
     noon        . ? parse as noon                         . = false
-    cson        . - C                                     . = false
     yaml                                                  . = false
     object                                                . = false
     result                                                . = false
@@ -49,19 +46,17 @@ format
     @p  path
         
 shortcuts 
-    -o  for @o
-    -r  for @v and no leading empty line
+    -o  for -f @o
+    -r  for -f @v and no leading empty line
 
 version     #{require("#{__dirname}/../package.json").version}
 """
 
-###
-00000000  00000000   00000000    0000000   00000000 
-000       000   000  000   000  000   000  000   000
-0000000   0000000    0000000    000   000  0000000  
-000       000   000  000   000  000   000  000   000
-00000000  000   000  000   000   0000000   000   000
-###
+# 00000000  00000000   00000000    0000000   00000000 
+# 000       000   000  000   000  000   000  000   000
+# 0000000   0000000    0000000    000   000  0000000  
+# 000       000   000  000   000  000   000  000   000
+# 00000000  000   000  000   000   0000000   000   000
 
 error = (msg) ->
     log ("\n"+msg+"\n").red
@@ -84,77 +79,47 @@ else if not fs.existsSync args.file
                 args.file   = file
                 break
     if argsFile == args.file
-        error "can't find file: #{args.file.yellow.bold}"
+        error "can't find file: #{bold yellow args.file}"
 
-###
-00000000  000   000  000000000  000   000   0000000   00     00  00000000
-000        000 000      000     0000  000  000   000  000   000  000     
-0000000     00000       000     000 0 000  000000000  000000000  0000000 
-000        000 000      000     000  0000  000   000  000 0 000  000     
-00000000  000   000     000     000   000  000   000  000   000  00000000
-###
+colors = args.colors
+
+# 00000000  000   000  000000000  000   000   0000000   00     00  00000000
+# 000        000 000      000     0000  000  000   000  000   000  000     
+# 0000000     00000       000     000 0 000  000000000  000000000  0000000 
+# 000        000 000      000     000  0000  000   000  000 0 000  000     
+# 00000000  000   000     000     000   000  000   000  000   000  00000000
 
 extname =     
     if      args.json then '.json'
-    else if args.cson then '.cson'
     else if args.noon then '.noon'
     else if args.yaml then '.yaml'
     else
         slash.extname args.file
     
 if extname not in noon.extnames
-    error "unknown file type: #{extname.yellow.bold}. use --json --cson --noon or --yaml to force parsing."
+    error "unknown file type: #{bold yellow extname}. use --json --noon or --yaml to force parsing."
 
 outext = extname
 if args.output in noon.extnames
     outext = args.output
     delete args.output
 
-###
-000       0000000    0000000   0000000  
-000      000   000  000   000  000   000
-000      000   000  000000000  000   000
-000      000   000  000   000  000   000
-0000000   0000000   000   000  0000000  
-###
+# 000       0000000    0000000   0000000  
+# 000      000   000  000   000  000   000
+# 000      000   000  000000000  000   000
+# 000      000   000  000   000  000   000
+# 0000000   0000000   000   000  0000000  
 
 data = noon.load args.file, extname
 
 if not (data.constructor.name in ['Array', 'Object'])
-    error "no structure in file: #{args.file.yellow.bold}"
+    error "no structure in file: #{bold yellow args.file}"
 
-###
- 0000000   0000000   000       0000000   00000000    0000000
-000       000   000  000      000   000  000   000  000     
-000       000   000  000      000   000  0000000    0000000 
-000       000   000  000      000   000  000   000       000
- 0000000   0000000   0000000   0000000   000   000  0000000 
-###
-    
-if args.colors
-    colors = 
-        key:     colors.gray
-        null:    colors.bold.blue
-        string:  colors.yellow.bold
-        value:   colors.bold.white
-        url:     colors.yellow
-        true:    colors.blue.bold
-        false:   colors.gray.dim
-        path:    colors.green
-        value:   colors.white
-        semver:  colors.red
-        number:  colors.magenta
-        visited: colors.red
-else
-    colors = false
-
-###
- 0000000   000   000  000000000
-000   000  000   000     000   
-000   000  000   000     000   
-000   000  000   000     000   
- 0000000    0000000      000   
-###
+#  0000000   000   000  000000000
+# 000   000  000   000     000   
+# 000   000  000   000     000   
+# 000   000  000   000     000   
+#  0000000    0000000      000   
 
 colors = false if args.output? or args.save
 
@@ -163,55 +128,49 @@ out = (s) ->
     if outfile?
         fs.ensureDirSync slash.dirname outfile
         try
-            atomic outfile, s, (err) ->
+            fs.writeFile outfile, s, 'utf8', (err) ->
                 if err
-                    error "can't write #{outfile.bold.yellow}: #{err}"
+                    error "can't write #{bold yellow outfile}: #{err}"
                 else
-                    log "wrote #{outfile.bold.white}".gray
+                    log "wrote #{bold white outfile}".gray
         catch err
-            error "can't write #{outfile.bold.yellow}: #{err}"
+            error "can't write #{bold yellow outfile}: #{err}"
     else
         log s
 
 if args.set?
     
-    ###
-     0000000  00000000  000000000
-    000       000          000   
-    0000000   0000000      000   
-         000  000          000   
-    0000000   00000000     000   
-    ###
+    #  0000000  00000000  000000000
+    # 000       000          000   
+    # 0000000   0000000      000   
+    #      000  000          000   
+    # 0000000   00000000     000   
     
     set = require './set'
     
     for p,v of noon.parse args.set
         set data, p, v
         
-    out noon.stringify data, colors: colors, ext: outext
+    out noon.stringify data, colors:colors, ext:outext
         
 else if not args.key? and not args.value? and not args.path?
 
-    ###
-    000      000   0000000  000000000
-    000      000  000          000   
-    000      000  0000000      000   
-    000      000       000     000   
-    0000000  000  0000000      000   
-    ###
+    # 000      000   0000000  000000000
+    # 000      000  000          000   
+    # 000      000  0000000      000   
+    # 000      000       000     000   
+    # 0000000  000  0000000      000   
     
-    s = noon.stringify data, colors: colors, ext: outext
+    s = noon.stringify data, colors:colors, ext:outext
     out '\n'+s+'\n'
     
 else      
     
-    ###
-     0000000  00000000   0000000   00000000    0000000  000   000
-    000       000       000   000  000   000  000       000   000
-    0000000   0000000   000000000  0000000    000       000000000
-         000  000       000   000  000   000  000       000   000
-    0000000   00000000  000   000  000   000   0000000  000   000
-    ###
+    #  0000000  00000000   0000000   00000000    0000000  000   000
+    # 000       000       000   000  000   000  000       000   000
+    # 0000000   0000000   000000000  0000000    000       000000000
+    #      000  000       000   000  000   000  000       000   000
+    # 0000000   00000000  000   000  000   000   0000000  000   000
       
     get = require './get'
       
@@ -232,36 +191,42 @@ else
                     
     if args.object or args.result or args.format
         for path in result
-            p = slash.join '.'
-            k = _.last path
+            p = path.join '.'
+            k = path[path.length-1]
             v = get data, path
 
             if args.object
                 path.pop()
-                s = noon.stringify get(data, path), colors: colors
+                s = noon.stringify get(data, path), colors:colors
             else if args.result
                 s = noon.stringify v, colors: colors
             else if args.format
                 s = args.format
-                s = s.replace '@k', colors.key k
-                s = s.replace '@p', colors.path p
-                s = s.replace '@v', noon.stringify v, colors: colors
+                # log "k:#{k} v:#{v} p:#{p} o:#{o}"
+                s = s.replace '@k', k
+                s = s.replace '@p', p
+                s = s.replace '@v', noon.stringify v, colors:colors
                 if args.format.indexOf('@o') >= 0
                     path.pop()
-                    o = noon.stringify get(data, path),
-                        colors: true
+                    if path.length
+                        o = noon.stringify get(data, path), colors:colors
+                    else
+                        o = noon.stringify data, colors:colors
+                    log "k:#{k} v:#{v} p:#{p} o:#{o}"
                     s = s.replace '@o', o
             else
                 o = {}
                 o[p] = v
-                s = noon.stringify o, colors: colors
+                s = noon.stringify o, colors:colors
             out s
     else
         o = {}
         for path in result
-            o[slash.join('.')] = get data, path
-        s = noon.stringify o, colors: colors
+            o[path.join('.')] = get data, path
+        s = noon.stringify o, colors:colors
         out s
         
     if not args.result
         out ''
+
+# ▸end 'sds'

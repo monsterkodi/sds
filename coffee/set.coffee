@@ -6,25 +6,21 @@
 0000000   00000000     000   
 ###
 
-_ = require 'lodash'
-
-###
 # accepts an object, a keypath as an array or string and a value
 # returns the object with value set at keypath
-###
 
 set = (object, keypath, value) ->
     
-    keypath = keypath.split '.' if _.isString keypath
-    throw "invalid keypath: #{JSON.stringify keypath}" if not _.isArray keypath
+    keypath = keypath.split '.' if typeof(keypath) == 'string'
+    throw "invalid keypath: #{JSON.stringify keypath}" if not (keypath instanceof Array)
     
-    kp = _.clone keypath
+    kp = [].concat keypath
     o = object
     
     while kp.length > 1
         k = kp.shift()
         if not o[k]?
-            if not _.isNaN _.parseInt k
+            if not Number.isNaN parseInt k
                 o = o[k] = []
             else
                 o = o[k] = {}

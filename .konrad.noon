@@ -1,3 +1,2 @@
-test    . test/test.coffee . coffee/set.coffee . coffee/tools.coffee
 ignore  . test/.*\.coffee$ . test\.*
 

@@ -6,10 +6,6 @@
  0000000   0000000   0000000  0000000  00000000   0000000     000   
 ###
 
-_ = require 'lodash'
-
-###
-#
 # accepts an object
 #         a filter (keypath, key, value) -> true        # false to exclude
 #         a map    (keypath, value) -> [keypath, value] # maps results
@@ -23,7 +19,6 @@ _ = require 'lodash'
 #
 # with keypath: a list of strings and integers
 #      value:   same as get(object, keypath)
-###
 
 collect = (object, filter, map, count=-1, keyPath=[], result=[]) ->
 
@@ -31,25 +26,27 @@ collect = (object, filter, map, count=-1, keyPath=[], result=[]) ->
     map    ?= (p,v) -> [p,v]
 
     switch object.constructor.name
+        
         when "Array"
             for i in [0...object.length]
                 v = object[i]
                 keyPath.push i
                 if filter keyPath, i,v
-                    result.push map _.clone(keyPath), v
+                    result.push map [].concat(keyPath), v
                     return result if count > 0 and result.length >= count
                 if v?.constructor.name in ["Array", "Object"]
                     collect v, filter, map, count, keyPath, result
                 keyPath.pop()
+                
         when "Object"
             for k,v of object
                 keyPath.push k
                 if filter keyPath, k,v
-                    result.push map _.clone(keyPath), v
+                    result.push map [].concat(keyPath), v
                     return result if count > 0 and result.length >= count
                 if v?.constructor.name in ["Array", "Object"]
                     collect v, filter, map, count, keyPath, result
                 keyPath.pop()
-    return result
+    result
 
 module.exports = collect
