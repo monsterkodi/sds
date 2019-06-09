@@ -13,7 +13,7 @@
 
 ### suche die struktur
 
-```coffee-script
+```coffeescript
 sds = require 'sds'
 
 # test against sds.extnames [list of supported file extensions]
@@ -41,7 +41,7 @@ if path.extname(infile) in sds.extnames
 
     # use stringify to convert to any of the supported formats
     
-    sds.stringify obj, ext: '.yaml'
+    sds.stringify obj, ext: 'yaml'
     
     # or save to disk (format is deduced from extension)
     
