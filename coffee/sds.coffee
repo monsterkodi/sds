@@ -124,15 +124,17 @@ if not (data.constructor.name in ['Array', 'Object'])
 colors = false if args.output? or args.save
 
 out = (s) ->
+    
     outfile = args.output ? (args.file if args.save)
+    
     if outfile?
-        fs.ensureDirSync slash.dirname outfile
+        fs.mkdirSync slash.dirname(outfile), recursive:true
         try
             fs.writeFile outfile, s, 'utf8', (err) ->
                 if err
                     error "can't write #{bold yellow outfile}: #{err}"
                 else
-                    log "wrote #{bold white outfile}".gray
+                    log gray "wrote #{bold white outfile}"
         catch err
             error "can't write #{bold yellow outfile}: #{err}"
     else
@@ -202,7 +204,6 @@ else
                 s = noon.stringify v, colors: colors
             else if args.format
                 s = args.format
-                # log "k:#{k} v:#{v} p:#{p} o:#{o}"
                 s = s.replace '@k', k
                 s = s.replace '@p', p
                 s = s.replace '@v', noon.stringify v, colors:colors
@@ -212,7 +213,6 @@ else
                         o = noon.stringify get(data, path), colors:colors
                     else
                         o = noon.stringify data, colors:colors
-                    log "k:#{k} v:#{v} p:#{p} o:#{o}"
                     s = s.replace '@o', o
             else
                 o = {}
