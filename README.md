@@ -49,3 +49,19 @@ if path.extname(infile) in sds.extnames
     
     # happy searching :-)
 ```
+
+[![npm package][npm-image]][npm-url] 
+[![Build Status][travis-image]][travis-url] 
+[![downloads][downloads-image]][downloads-url] 
+[![Dependencies Status][david-image]][david-url]
+
+[npm-image]:https://img.shields.io/npm/v/sds.svg
+[npm-url]:http://npmjs.org/package/sds
+[travis-image]:https://travis-ci.org/monsterkodi/sds.svg?branch=master
+[travis-url]:https://travis-ci.org/monsterkodi/sds
+[david-image]:https://david-dm.org/monsterkodi/sds/status.svg
+[david-url]:https://david-dm.org/monsterkodi/sds
+[downloads-image]:https://img.shields.io/npm/dm/sds.svg
+[downloads-url]:http://npmjs.org/package/sds
+
+
