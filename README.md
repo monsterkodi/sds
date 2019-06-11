@@ -62,6 +62,6 @@ if path.extname(infile) in sds.extnames
 [david-image]:https://david-dm.org/monsterkodi/sds/status.svg
 [david-url]:https://david-dm.org/monsterkodi/sds
 [downloads-image]:https://img.shields.io/npm/dm/sds.svg
-[downloads-url]:http://npmjs.org/package/sds
+[downloads-url]:https://www.npmtrends.com/sds
 
 
