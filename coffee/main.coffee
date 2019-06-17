@@ -18,6 +18,7 @@ module.exports =
     find:       require './find'
     get:        require './get'
     set:        require './set'
+    del:        require './del'
     regexp:     require './regexp'
     collect:    require './collect'
     toplevel:   tools.toplevel
