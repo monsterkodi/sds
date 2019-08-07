@@ -318,15 +318,6 @@ describe 'stringify', ->
         }
         """
 
-    it 'should output yaml', ->
-
-        expect sds.stringify o, ext: '.yaml'
-        .to.eql """
-        a: 1
-        b: 2
-
-        """
-
 ###
  0000000   0000000          000  00000000   0000000  000000000  000  00000000  000   000
 000   000  000   000        000  000       000          000     000  000        000 000
