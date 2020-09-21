@@ -21,6 +21,9 @@ set = function(object, keypath, value) {
     o = object;
     while (kp.length > 1) {
         k = kp.shift();
+        if (k === '__proto__' || k === 'constructor' || k === 'prototype') {
+            throw "Attempted prototype pollution: " + (JSON.stringify(value)) + " for keypath " + (keypath.join('.')) + " in " + (JSON.stringify(object));
+        }
         if (o[k] == null) {
             if (!Number.isNaN(parseInt(k))) {
                 o = o[k] = [];
