@@ -15,8 +15,12 @@ set = (object, keypath, value) ->
     throw "invalid keypath: #{JSON.stringify keypath}" if not (keypath instanceof Array)
     
     kp = [].concat keypath
-    o = object
     
+    if '__proto__' in keypath # let's try to make those security bots happy ...
+        throw "__proto__ in keypath: #{JSON.stringify keypath}"
+    
+    o = object
+        
     while kp.length > 1
         k = kp.shift()
         if not o[k]?

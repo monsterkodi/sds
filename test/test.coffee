@@ -219,6 +219,14 @@ describe 'set', ->
         expect sds.set {a: {c:3} }, 'a.c'
         .to.eql {a:{}}
 
+    it 'should not allow any __proto__ in keypath', ->
+
+        expect -> sds.set {}, '__proto__.jhu', true
+        .to.throw '__proto__ in keypath: ["__proto__","jhu"]'
+
+        expect -> sds.set {}, 'bla.__proto__.jhu', true
+        .to.throw '__proto__ in keypath: ["bla","__proto__","jhu"]'
+        
 ###
 00000000  000  000   000  0000000
 000       000  0000  000  000   000
