@@ -37,6 +37,7 @@ sds
     object                                                . = false
     result                                                . = false
     colors      . ? output with ansi colors               . = false
+    stdin       . ? read from stdin                       . = false . - i
     
 format
     @k  key
@@ -204,7 +205,7 @@ process.stdin.on 'readable' ->
         pipeData += data
         
 process.stdin.on 'end' -> 
-    
+
     if args.file == 'package.json' then delete args.file 
     if not args.value? and not args.key? and not args.path?
         args.path = args.file
@@ -218,7 +219,7 @@ process.stdin.on 'end' ->
     data = switch extname
         when '.json' then JSON.parse pipeData
         else noon.parse pipeData
-    
+
     handleData data
 
 # 00000000  000  000      00000000  
@@ -244,7 +245,7 @@ getExtname = ->
 
 startFileSearch = ->
     
-    return if pipeMode
+    return if pipeMode or args.stdin
 
     if not args.file?
         if fs.existsSync './package.json'
