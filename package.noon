@@ -1,5 +1,5 @@
 name            sds
-version         4.0.0
+version         4.2.0
 description     structured data search
 main            ./js/main.js
 author          monsterkodi
@@ -16,12 +16,11 @@ preferGlobal    true
 keywords
                 json
                 noon
-                yaml
                 structured
                 data
                 search
 scripts
-                test  ./node_modules/.bin/mocha -c --require koffee/js/register test/test.coffee
+                test  mocha -c --require koffee/js/register test/test.coffee
 dependencies
                 karg  ^1.19.0
                 klor  ^1.4.0

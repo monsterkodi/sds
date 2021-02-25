@@ -1,2 +1,5 @@
-ignore  . test/.*\.coffee$ . test\.*
+ignore  
+    test/.*\.coffee$ 
+    test\.*
+    .konrad.noon
 
