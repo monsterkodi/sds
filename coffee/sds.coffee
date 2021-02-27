@@ -197,10 +197,8 @@ handleData = (data) ->
 # 000        000  000        000       
 # 000        000  000        00000000  
 
-pipeMode = false
 pipeData = ""
 process.stdin.on 'readable' ->
-    pipeMode = true 
     if data = process.stdin.read()?.toString 'utf8'
         pipeData += data
         
@@ -243,10 +241,8 @@ getExtname = ->
         outext = args.output
         delete args.output
 
-startFileSearch = ->
+if process.stdin.isTTY and not args.stdin
     
-    return if pipeMode or args.stdin
-
     if not args.file?
         if fs.existsSync './package.json'
             args.file = './package.json'
@@ -271,6 +267,4 @@ startFileSearch = ->
     handleData noon.load args.file, extname
     process.exit 0
     
-setTimeout startFileSearch, 1
-
 # ▸end 'sds'
